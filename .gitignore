@@ -9,4 +9,4 @@ logs/
 *.jpeg
 *.png
 
-venv/
+venv_shopers_scraping/
