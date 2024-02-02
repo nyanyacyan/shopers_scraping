@@ -3,15 +3,12 @@
 # 自動ログインクラス
 # headlessモード、reCAPTCHA回避、エラー時のみ通知（ライン、ChatWork、Slack）
 # 2023/1/20制作
-# 仮想環境 / source autologin-v1/bin/activate
-
 
 #---バージョン---
 # Python==3.8.10
 # selenium==4.1
 # headlessモード
 # Chromedriver==ChromeDriverManager
-
 
 #---流れ--
 # ID入力=> パス入力=> クリック

@@ -68,7 +68,7 @@ class Scraper:
             self.logger.debug("クリック完了")
 
         except NoSuchElementException as e:
-            self.logger.debug(f"検索バーが見つかりません:{e}")
+            self.logger.error(f"検索バーが見つかりません:{e}")
 
 
         # ページが完全に読み込まれるまで待機
@@ -111,7 +111,7 @@ class Scraper:
                 self.logger.debug(f"価格が見つかりません:{e}")
 
             except Exception as e:
-                self.logger.debug(f"pricesの処理中にエラー:{e}")
+                self.logger.error(f"pricesの処理中にエラー:{e}")
 
 
             try:
@@ -131,10 +131,10 @@ class Scraper:
                 self.logger.debug(f"'image_url:'{image_urls}")
 
                 if len(image_urls) > 2:
-                    self.logger.debug('画像URLが複数あり、特定できてません')
+                    self.logger.error('画像URLが複数あり、特定できてません')
                 
                 if not image_urls:
-                    self.logger.debug("画像データが見つからなかった")
+                    self.logger.error("画像データが見つからなかった")
                 
                 self.logger.debug("画像URLの抽出完了")
 
@@ -144,7 +144,7 @@ class Scraper:
                 self.logger.debug("URLの抽出完了")
 
             except Exception as e:
-                self.logger.debug("処理中にエラーが発生:{e}")
+                self.logger.error("処理中にエラーが発生:{e}")
 
         except:
             self.logger.debug("商品の該当なし")
