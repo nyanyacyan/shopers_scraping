@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+import os
+
 from autologin.autologin_subclass.auto_login_netsea import AutoLoginNetsea
 from autologin.autologin_subclass.auto_login_oroshiuri import AutoLoginOroshiuri
 from autologin.autologin_subclass.auto_login_petpochitto import AutoLoginPetpochitto
@@ -15,16 +18,27 @@ from spreadsheet.write import Spreadsheet_write
 
 from logger.debug_logger import Logger
 
+load_dotenv()
+
+debug_mode = os.getenv('DEBUG_MODE', 'False') == 'True'
+logger_instance = Logger(__name__, debug_mode=debug_mode)
+logger = logger_instance.get_logger()
+
 def process_scraper_netsea():
-    data = Spreadsheet_read.spreadsheet_read()
-    Logger.debug(f"スプシ記載されたJAN、商品名: {data}")
+    spreadsheet_reader = Spreadsheet_read()
+    dic_data = spreadsheet_reader.spreadsheet_read()
+    logger.debug(f"スプシ記載されたJAN、商品名: {dic_data}")
 
-    # Logger.debug("netseaオートログインスタート")
-    # AutoLoginNetsea.auto_login_netsea()
-    # Logger.debug("netseaオートログイン完了")
+    for index, (jan, name) in enumerate(dic_data.items()):
+        search_word = f"{jan} {name}"
+        logger.debug(f"{index + 1}: {search_word}")
 
-    # Logger.debug("netseaスクレイピングスタート")
-    # ScraperNetsea.scraper_netsea()
-    # Logger.debug("netseaスクレイピング終了")
+        # Logger.debug("netseaオートログインスタート")
+        # AutoLoginNetsea.auto_login_netsea()
+        # Logger.debug("netseaオートログイン完了")
 
-    return data
+        # Logger.debug("netseaスクレイピングスタート")
+        # ScraperNetsea.scraper_netsea()
+        # Logger.debug("netseaスクレイピング終了")
+
+    return dic_data

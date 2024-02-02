@@ -11,7 +11,7 @@
 # ----------------------------------------------------------------------------------
 from dotenv import load_dotenv
 import os
-from auto_login_headless import AutoLogin
+from autologin.auto_login_headless import AutoLogin
 
 load_dotenv()  # .env ファイルから環境変数を読み込む
 
