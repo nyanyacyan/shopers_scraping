@@ -5,6 +5,8 @@
 logs/
 *.log
 
+*.json
+
 # 画像をアップロードしない
 *.jpeg
 *.png
