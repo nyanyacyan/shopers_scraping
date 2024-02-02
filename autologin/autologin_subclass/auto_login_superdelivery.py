@@ -18,18 +18,22 @@ class AutoLoginSuperDelivery(AutoLogin):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
+        self.url_super_delivery = os.getenv('URL_SUPER_DELIVERY')  # login_url
+        self.id_super_delivery = os.getenv('ID_SUPER_DELIVERY')  # userid
+        self.password_super_delivery = os.getenv('PASSWORD_SUPER_DELIVERY')  # password
+        self.userid_xpath_super_delivery = "//input[@name='loginEmail']"  # userid_xpath
+        self.password_xpath_super_delivery = "//input[@name='loginPassword']"  # password_xpath
+        self.login_button_xpath_super_delivery = "//input[@name='login']"  # login_button_xpath
+        self.cart_element_xpath_super_delivery = "//img[contains(@src, 'cart') and contains(@alt, '買い物カゴ')]"  # cart_element_xpath
+
 
     def auto_login_super_delivery(self):
-        url_super_delivery = os.getenv('URL_SUPER_DELIVERY')
-        id_super_delivery = os.getenv('ID_SUPER_DELIVERY')
-        password_super_delivery = os.getenv('PASSWORD_SUPER_DELIVERY')
-
         self.auto_login(
-            url_super_delivery,
-            id_super_delivery,
-            password_super_delivery,
-            "//input[@name='loginEmail']",
-            "//input[@name='loginPassword']",
-            "//input[@name='login']",
-            "//img[contains(@src, 'cart') and contains(@alt, '買い物カゴ')]"
+            self.url_super_delivery,
+            self.id_super_delivery,
+            self.password_super_delivery,
+            self.userid_xpath_super_delivery,
+            self.password_xpath_super_delivery,
+            self.login_button_xpath_super_delivery,
+            self.cart_element_xpath_super_delivery
         )

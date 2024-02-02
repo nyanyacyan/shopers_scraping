@@ -19,18 +19,22 @@ class AutoLoginOroshiuri(AutoLogin):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
+        self.url_oroshiuri = os.getenv('URL_OROSHIURI')  # login_url
+        self.id_oroshiuri = os.getenv('ID_OROSHIURI')  # userid
+        self.password_oroshiuri = os.getenv('PASSWORD_OROSHIURI')  # password
+        self.userid_xpath_oroshiuri = "//input[@name='loginEmail']"  # userid_xpath
+        self.password_xpath_oroshiuri = "//input[@name='loginPassword']"  # password_xpath
+        self.login_button_xpath_oroshiuri = "//input[@name='login']"  # login_button_xpath
+        self.cart_element_xpath_oroshiuri = "//a[contains(@href, 'cart') and .//i[contains(@class, 'fa-shopping-cart')]]"  # cart_element_xpath
+
 
     def auto_login_oroshiuri(self):
-        url_oroshiuri = os.getenv('URL_OROSHIURI')
-        id_oroshiuri = os.getenv('ID_OROSHIURI')
-        password_oroshiuri = os.getenv('PASSWORD_OROSHIURI')
-
         self.auto_login(
-            url_oroshiuri,
-            id_oroshiuri,
-            password_oroshiuri,
-            "//input[@name='loginEmail']",
-            "//input[@name='loginPassword']",
-            "//input[@name='login']",
-            "//a[contains(@href, 'cart') and .//i[contains(@class, 'fa-shopping-cart')]]"
+            self.url_oroshiuri,
+            self.id_oroshiuri,
+            self.password_oroshiuri,
+            self.userid_xpath_oroshiuri,
+            self.password_xpath_oroshiuri,
+            self.login_button_xpath_oroshiuri,
+            self.cart_element_xpath_oroshiuri
         )
