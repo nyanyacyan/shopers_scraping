@@ -67,7 +67,7 @@ class AutoLogin:
         self.slack_notify = SlackNotify()
 
 
-    def login(self, login_url, userid, password, userid_xpath, password_xpath, login_button_xpath, cart_element_xpath):
+    def auto_login(self, login_url, userid, password, userid_xpath, password_xpath, login_button_xpath, cart_element_xpath):
         self.chrome.get(login_url)
 
         # 現在のURL
