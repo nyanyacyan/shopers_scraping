@@ -36,19 +36,14 @@ from notify.notify_slack import SlackNotify
 
 load_dotenv()
 class AutoLogin:
-    def __init__(self, debug_mode=False):
+    def __init__(self, chrome, debug_mode=False):
         # Loggerクラスを初期化
         debug_mode = os.getenv('DEBUG_MODE', 'False') == 'True'
         self.logger_instance = Logger(__name__, debug_mode=debug_mode)
         self.logger = self.logger_instance.get_logger()
         self.debug_mode = debug_mode
 
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--window-size=1680,780")
-
-        service = Service(ChromeDriverManager().install())
-        self.chrome = webdriver.Chrome(service=service, options=chrome_options)
+        self.chrome = chrome
 
 
         # SolverRecaptchaクラスを初期化

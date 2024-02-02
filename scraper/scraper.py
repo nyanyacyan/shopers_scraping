@@ -17,33 +17,34 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from dotenv import load_dotenv
+import re
 import os
 
 # 自作モジュール
 from logger.debug_logger import Logger
-from spreadsheet.read import Spreadsheet_read
+from spreadsheet.read import SpreadsheetRead
 
 load_dotenv()
 
 class Scraper:
-    def __init__(self, debug_mode=False):
+    def __init__(self, chrome, debug_mode=False):
         # Loggerクラスを初期化
         debug_mode = os.getenv('DEBUG_MODE', 'False') == 'True'
         self.logger_instance = Logger(__name__, debug_mode=debug_mode)
         self.logger = self.logger_instance.get_logger()
         self.debug_mode = debug_mode
 
-        self.mix_data = Spreadsheet_read(debug_mode=debug_mode)
+        self.mix_data = SpreadsheetRead(debug_mode=debug_mode)
 
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--window-size=1680,780")
+        self.chrome = chrome
 
-        service = Service(ChromeDriverManager().install())
-        self.chrome = webdriver.Chrome(service=service, options=chrome_options)
+        # データ格納するための箱
+        self.price = None
+        self.image_url = None
+        self.current_url = None
 
 
-    def scraper(self, sarch_field_xpath, sarch_word, login_button_xpath, show_box_xpath, price_xpath, image_xpath):
+    def scraper(self, sarch_field_xpath, sarch_word, sarch_button_xpath, showcase_box_xpath, price_xpath, image_xpath, url_xpath):
         '''
         autologinにてサイトが開かれてる状態
         => 検索バーへスプシからのデータを入力して検索
@@ -51,6 +52,8 @@ class Scraper:
         '''
         try:
             # 検索バーを探して入力
+            # ログイン画面のスクショ
+            self.chrome.save_screenshot("/Users/nyanyacyan/Desktop/ProgramFile/project_file/shopers_scraping/scraper_before_take.png")
             self.logger.debug("検索バーを特定開始")
             sarch_field = self.chrome.find_element_by_xpath(sarch_field_xpath)
             sarch_field.send_keys(sarch_word)
@@ -58,7 +61,7 @@ class Scraper:
 
             # 検索ボタンを探す
             self.logger.debug("buttanサーチ開始")
-            login_button = self.chrome.find_element_by_xpath(login_button_xpath)
+            login_button = self.chrome.find_element_by_xpath(sarch_button_xpath)
             self.logger.debug("buttanサーチ、OK")
 
 
@@ -80,35 +83,29 @@ class Scraper:
 
 
         try:
-            # 商品ページ（showbox）があるかどうかを確認
-            self.chrome.find_elements_by_xpath(show_box_xpath)
+            # 商品ページ（showcasecasebox）があるかどうかを確認
+            self.chrome.find_elements_by_xpath(showcase_box_xpath)
 
             try:
                 # 商品をなるべく厳選できるpathを用意する
                 self.logger.debug('priceの捜索開始')
                 price_elements = self.chrome.find_elements_by_xpath(price_xpath)
-                prices = []
+                if price_elements:
+                    price_text = price_elements[0].text  # 最初の要素のテキストを取得
+                    self.logger.debug(f"price捜索完了:{price_text}")
+                else:
+                    raise ValueError("価格要素が存在しません。")
 
-                self.logger.debug("pricesの解析とクリーニング開始")
-                for element in price_elements:
-                    price_text = element.text
-                    price_without_comma = price_text.replace(",", "")
-                    price_int_change = int(price_without_comma)
+                try:
+                    self.logger.debug("pricesの解析とクリーニング開始")
+                    price_without_comma = re.sub("[^\d]", "", price_text)
+                    clean_price = int(price_without_comma)
+                    self.logger.debug(f"価格の抽出完了:{clean_price}")
+                    self.price = clean_price
 
-                    prices.append(price_int_change)
-                
-                self.logger.debug(prices)
-
-                if len(prices) > 2:
-                    raise ValueError("価格データが複数あり、特定できてません。")
-                
-                if not prices:
-                    raise ValueError("価格データが見つかりませんでした。")
-
-                self.logger.debug("価格の抽出完了")
-
-            except NoSuchElementException as e:
-                self.logger.debug(f"価格が見つかりません:{e}")
+                except ValueError:
+                    self.logger.error(f"価格のクリーニングに失敗: {price_without_comma}")
+                    self.price = None
 
             except Exception as e:
                 self.logger.error(f"pricesの処理中にエラー:{e}")
@@ -120,32 +117,46 @@ class Scraper:
                 # １枚目のみ表示
                 self.logger.debug("画像の捜索開始")
                 image_elements = self.chrome.find_elements_by_xpath(image_xpath)
-                image_urls = []
+                # self.logger.debug(f"'image_elements:'{image_elements}")
 
-                # 画像の解析開始
-                for image_element in image_elements:
-                    image_url = image_element.get_attribute("src")
+                if image_elements:
+                    image_url = image_elements[0].get_attribute('src')
+                else:
+                    image_url = None
 
-                    image_urls.append(image_url)
-
-                self.logger.debug(f"'image_url:'{image_urls}")
-
-                if len(image_urls) > 2:
-                    self.logger.error('画像URLが複数あり、特定できてません')
-                
-                if not image_urls:
-                    self.logger.error("画像データが見つからなかった")
-                
-                self.logger.debug("画像URLの抽出完了")
-
-                # URLを入手
-                current_url = self.chrome.current_url
-                self.logger.debug(current_url)
-                self.logger.debug("URLの抽出完了")
+                self.image_url = image_url
+                self.logger.debug(f"'画像URLの抽出完了:'{self.image_url}")
 
             except Exception as e:
-                self.logger.error("処理中にエラーが発生:{e}")
+                self.logger.debug(f"'画像の処理中にエラー:'{e}")
+
+            try:
+                # URLを入手
+                self.logger.debug("商品URLの捜索開始")
+                url_elements = self.chrome.find_elements_by_xpath(url_xpath)
+
+                if url_elements:
+                    url = url_elements[0].get_attribute('href')
+                else:
+                    url = None
+
+                self.url = url
+                self.logger.debug(f"商品URLの抽出完了: {self.url}")
+                self.logger.debug("商品URLの抽出完了")
+
+            except Exception as e:
+                self.logger.error(f"処理中にエラーが発生: {e}")
 
         except:
             self.logger.debug("商品の該当なし")
             return "該当なし"
+
+    # 各種の変数を召喚用に作成したメソッド
+    def get_price(self):
+        return self.price
+    
+    def get_image_url(self):
+        return self.image_url
+    
+    def get_current_url(self):
+        return self.current_url

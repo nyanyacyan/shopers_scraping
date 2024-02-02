@@ -13,22 +13,26 @@ from scraper.scraper import Scraper
 load_dotenv()  # .env ファイルから環境変数を読み込む
 
 class ScraperNetsea(Scraper):
-    def __init__(self, debug_mode=False):
-        super().__init__(debug_mode=debug_mode)
+    def __init__(self, chrome, debug_mode=False):
+        super().__init__(chrome, debug_mode=debug_mode)
 
-        self.netsea_sarch_field_xpath = ""  # sarch_field_xpath
-        self.netsea_login_button_xpath = ""  # login_button_xpath
-        self.netsea_show_box_xpath = ""  # show_box_xpath
-        self.netsea_price_xpath = ""  # price_xpath
-        self.netsea_image_xpath = ""  # image_xpath
+        self.chrome = chrome
 
-    #  sarch_field_xpath, sarch_word, login_button_xpath, show_box_xpath, price_xpath, image_xpath
-    def scraper_netsea(self, sarch_word):
+        self.netsea_search_field_xpath = "//input[@id='searchInput']"  # search_field_xpath
+        self.netsea_search_button_xpath = "//div[@class='searchSubmit']/button[@id='searchBtn' and @class='searchBtn']"  # search_button_xpath
+        self.netsea_showcase_box_xpath = "//section[@class='showcaseType01']"  # showcase_box_xpath
+        self.netsea_price_xpath = "//section[@class='showcaseType01']//p[@class='price']"  # price_xpath
+        self.netsea_image_xpath = "//section[@class='showcaseType01']//img[@class='itemsThum']"  # image_xpath
+        self.netsea_url_xpath = "//section[@class='showcaseType01']//a[@class='flywheel_event']"  # url_xpath
+
+    #  search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath, image_xpath
+    def scraper_netsea(self, search_word):
         self.scraper(
-            self.netsea_sarch_field_xpath,
-            sarch_word,
-            self.netsea_login_button_xpath,
-            self.netsea_show_box_xpath,
+            self.netsea_search_field_xpath,
+            search_word,
+            self.netsea_search_button_xpath,
+            self.netsea_showcase_box_xpath,
             self.netsea_price_xpath,
-            self.netsea_image_xpath
+            self.netsea_image_xpath,
+            self.netsea_url_xpath
         )

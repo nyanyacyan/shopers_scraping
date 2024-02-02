@@ -16,19 +16,19 @@ class ScraperSuperDelivery(Scraper):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
-        self.super_delivery_sarch_field_xpath = ""  # sarch_field_xpath
-        self.super_delivery_login_button_xpath = ""  # login_button_xpath
-        self.super_delivery_show_box_xpath = ""  # show_box_xpath
+        self.super_delivery_search_field_xpath = ""  # search_field_xpath
+        self.super_delivery_search_button_xpath = ""  # search_button_xpath
+        self.super_delivery_showcase_box_xpath = ""  # showcase_box_xpath
         self.super_delivery_price_xpath = ""  # price_xpath
         self.super_delivery_image_xpath = ""  # image_xpath
 
-    #  sarch_field_xpath, sarch_word, login_button_xpath, show_box_xpath, price_xpath, image_xpath
-    def scraper_super_delivery(self, sarch_word):
+    #  search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath, image_xpath
+    def scraper_super_delivery(self, search_word):
         self.scraper(
-            self.super_delivery_sarch_field_xpath,
-            sarch_word,
-            self.super_delivery_login_button_xpath,
-            self.super_delivery_show_box_xpath,
+            self.super_delivery_search_field_xpath,
+            search_word,
+            self.super_delivery_search_button_xpath,
+            self.super_delivery_showcase_box_xpath,
             self.super_delivery_price_xpath,
             self.super_delivery_image_xpath
         )

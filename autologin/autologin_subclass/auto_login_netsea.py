@@ -17,8 +17,10 @@ from autologin.auto_login_headless import AutoLogin
 load_dotenv()  # .env ファイルから環境変数を読み込む
 
 class AutoLoginNetsea(AutoLogin):
-    def __init__(self, debug_mode=False):
-        super().__init__(debug_mode=debug_mode)
+    def __init__(self, chrome, debug_mode=False):
+        super().__init__(chrome, debug_mode=debug_mode)
+
+        self.chrome = chrome
 
         self.url_netsea = os.getenv('URL_NETSEA')  # login_url
         self.id_netsea = os.getenv('ID_NETSEA')  # userid

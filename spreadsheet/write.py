@@ -20,7 +20,7 @@ from logger.debug_logger import Logger
 
 load_dotenv()
 
-class Spreadsheet_write:
+class SpreadsheetWrite:
     def __init__(self, debug_mode=False):
         # Loggerクラスを初期化
         debug_mode = os.getenv('DEBUG_MODE', 'False') == 'True'
