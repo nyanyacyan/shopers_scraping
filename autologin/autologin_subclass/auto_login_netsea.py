@@ -28,7 +28,7 @@ class AutoLoginNetsea(AutoLogin):
         self.userid_xpath_netsea = "//input[@name='login_id']"  # userid_xpath
         self.password_xpath_netsea = "//input[@name='password']"  # password_xpath
         self.login_button_xpath_netsea = "//button[@name='submit']"  # login_button_xpath
-        self.cart_element_xpath_netsea = "/a[contains(@href, 'cart') and .//i[contains(@class, 'fa-shopping-cart')]]"  # cart_element_xpath
+        self.cart_element_xpath_netsea = "//li[@class='header_cart_link']"  # cart_element_xpath
 
 
     def auto_login_netsea(self):
