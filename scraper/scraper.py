@@ -37,7 +37,7 @@ class Scraper:
         # データ格納するための箱
         self.price = None
         self.image_url = None
-        self.current_url = None
+        self.url = None
 
 
     def scraper(self, sarch_field_xpath, sarch_word, sarch_button_xpath, showcase_box_xpath, price_xpath, image_xpath, url_xpath):
@@ -48,8 +48,6 @@ class Scraper:
         '''
         try:
             # 検索バーを探して入力
-            # ログイン画面のスクショ
-            self.chrome.save_screenshot("/Users/nyanyacyan/Desktop/ProgramFile/project_file/shopers_scraping/scraper_before_take.png")
             self.logger.debug("検索バーを特定開始")
             sarch_field = self.chrome.find_element_by_xpath(sarch_field_xpath)
             sarch_field.send_keys(sarch_word)
@@ -142,7 +140,13 @@ class Scraper:
 
             except Exception as e:
                 self.logger.error(f"処理中にエラーが発生: {e}")
+                
+            # ここで各変数の値をログに出力
+            self.logger.debug(f"最終的な価格: {self.price}")
+            self.logger.debug(f"最終的な画像URL: {self.image_url}")
+            self.logger.debug(f"最終的な商品URL: {self.url}")
 
+        # このように最後にログを出力することで、関数の実行が完了した時点での各変数の値を確認できます。
         except:
             self.logger.debug("商品の該当なし")
             return "該当なし"
@@ -154,5 +158,5 @@ class Scraper:
     def get_image_url(self):
         return self.image_url
     
-    def get_current_url(self):
-        return self.current_url
+    def get_url(self):
+        return self.url
