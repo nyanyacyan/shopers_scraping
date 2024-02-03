@@ -41,7 +41,7 @@ class Scraper:
         # データ格納するための箱
         self.price = None
         self.image_url = None
-        self.current_url = None
+        self.url = None
 
 
     def scraper(self, sarch_field_xpath, sarch_word, sarch_button_xpath, showcase_box_xpath, price_xpath, image_xpath, url_xpath):
@@ -158,5 +158,5 @@ class Scraper:
     def get_image_url(self):
         return self.image_url
     
-    def get_current_url(self):
-        return self.current_url
+    def get_url(self):
+        return self.url
