@@ -1,27 +1,16 @@
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import TimeoutException
+# coding: utf-8
+# ---------------------------------------------------------------------------------------------------------
+# 非同期処理　クラス
+# 2023/2/1制作
+
+#---バージョン---
+# Python==3.8.10
+
+# ---------------------------------------------------------------------------------------------------------
 from dotenv import load_dotenv
 import os
-import time
-
-from autologin.autologin_subclass.auto_login_netsea import AutoLoginNetsea
-from autologin.autologin_subclass.auto_login_oroshiuri import AutoLoginOroshiuri
-from autologin.autologin_subclass.auto_login_petpochitto import AutoLoginPetpochitto
-from autologin.autologin_subclass.auto_login_superdelivery import AutoLoginSuperDelivery
-from autologin.autologin_subclass.auto_login_tajimaya import AutoLoginTajimaya
-
-from scraper.scraper_subclass.scraper_netsea import ScraperNetsea
-from scraper.scraper_subclass.scraper_oroshiuri import ScraperOroshiuri
-from scraper.scraper_subclass.scraper_petpochitto import ScraperPetpochitto
-from scraper.scraper_subclass.scraper_super_delivery import ScraperSuperDelivery
-from scraper.scraper_subclass.scraper_tajimaya import ScraperTajimaya
+from autologin import AutoLoginNetsea, AutoLoginOroshiuri, AutoLoginPetpochitto, AutoLoginSuperDelivery, AutoLoginTajimaya
+from scraper import ScraperNetsea, ScraperOroshiuri, ScraperPetpochitto, ScraperSuperDelivery, ScraperTajimaya
 
 from spreadsheet.read import SpreadsheetRead
 

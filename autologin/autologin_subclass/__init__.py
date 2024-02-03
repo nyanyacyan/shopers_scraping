@@ -1,5 +1,0 @@
-from .auto_login_netsea import AutoLoginNetsea
-from .auto_login_oroshiuri import AutoLoginOroshiuri
-from .auto_login_petpochitto import AutoLoginPetpochitto
-from .auto_login_superdelivery import AutoLoginSuperDelivery
-from .auto_login_tajimaya import AutoLoginTajimaya

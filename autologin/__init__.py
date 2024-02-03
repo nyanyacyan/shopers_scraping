@@ -1,0 +1,5 @@
+from .autologin_subclass.auto_login_netsea import AutoLoginNetsea
+from .autologin_subclass.auto_login_oroshiuri import AutoLoginOroshiuri
+from .autologin_subclass.auto_login_petpochitto import AutoLoginPetpochitto
+from .autologin_subclass.auto_login_superdelivery import AutoLoginSuperDelivery
+from .autologin_subclass.auto_login_tajimaya import AutoLoginTajimaya
