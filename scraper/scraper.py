@@ -10,10 +10,6 @@
 # それぞれの子クラスにて抽出先を決定して実行できるようにする=> 新しいスクレイピング先には子クラスの作成が必要
 # 入力項目=> 日付=> 画像=> JAN=> 商品名=> 価格=> URL
 # ---------------------------------------------------------------------------------------------------------
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from dotenv import load_dotenv
