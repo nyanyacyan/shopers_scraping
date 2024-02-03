@@ -52,8 +52,6 @@ class Scraper:
         '''
         try:
             # 検索バーを探して入力
-            # ログイン画面のスクショ
-            self.chrome.save_screenshot("/Users/nyanyacyan/Desktop/ProgramFile/project_file/shopers_scraping/scraper_before_take.png")
             self.logger.debug("検索バーを特定開始")
             sarch_field = self.chrome.find_element_by_xpath(sarch_field_xpath)
             sarch_field.send_keys(sarch_word)
