@@ -152,7 +152,7 @@ class AutoLogin:
         try:
             self.chrome.find_element_by_xpath(cart_element_xpath)
             self.logger.info("ログイン完了")
-            self.chatwork_notify.chatwork_image_notify("ログインに成功")
+            # self.chatwork_notify.chatwork_notify("ログインに成功")
 
         except NoSuchElementException:
             self.logger.info(f"カートの確認が取れませんでした")
