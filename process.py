@@ -53,8 +53,5 @@ class Process:
             self.scraper_instance.scraper_netsea(search_word)
             self.logger.debug("netseaスクレイピング終了")
 
-            # 書き込むデータごとに関数を呼び出す必要あり=> JAN、商品名、価格、画像、URL
-            self.logger.debug("netseaデータをスプシに書込開始")
-            self.spreadsheet_write_instance.write_netsea()
-            self.logger.debug("netseaデータをスプシに書込終了")
+
 

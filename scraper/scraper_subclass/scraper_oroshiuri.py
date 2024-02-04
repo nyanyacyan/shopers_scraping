@@ -20,7 +20,6 @@ class ScraperOroshiuri(Scraper):
         self.oroshiuri_search_button_xpath = ""  # search_button_xpath
         self.oroshiuri_showcase_box_xpath = ""  # showcase_box_xpath
         self.oroshiuri_price_xpath = ""  # price_xpath
-        self.oroshiuri_image_xpath = ""  # image_xpath
 
     #  search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath, image_xpath
     def scraper_oroshiuri(self, search_word):
@@ -30,5 +29,4 @@ class ScraperOroshiuri(Scraper):
             self.oroshiuri_search_button_xpath,
             self.oroshiuri_showcase_box_xpath,
             self.oroshiuri_price_xpath,
-            self.oroshiuri_image_xpath
         )

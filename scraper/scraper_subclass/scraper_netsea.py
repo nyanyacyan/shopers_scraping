@@ -22,10 +22,9 @@ class ScraperNetsea(Scraper):
         self.netsea_search_button_xpath = "//div[@class='searchSubmit']/button[@id='searchBtn' and @class='searchBtn']"  # search_button_xpath
         self.netsea_showcase_box_xpath = "//section[@class='showcaseType01']"  # showcase_box_xpath
         self.netsea_price_xpath = "//section[@class='showcaseType01']//p[@class='price']"  # price_xpath
-        self.netsea_image_xpath = "//section[@class='showcaseType01']//img[@class='itemsThum']"  # image_xpath
         self.netsea_url_xpath = "//section[@class='showcaseType01']//a[@class='flywheel_event']"  # url_xpath
 
-    #  search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath, image_xpath
+    #  search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath
     def scraper_netsea(self, search_word):
         self.scraper(
             self.netsea_search_field_xpath,
@@ -33,6 +32,5 @@ class ScraperNetsea(Scraper):
             self.netsea_search_button_xpath,
             self.netsea_showcase_box_xpath,
             self.netsea_price_xpath,
-            self.netsea_image_xpath,
             self.netsea_url_xpath
         )

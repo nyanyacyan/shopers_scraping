@@ -40,7 +40,7 @@ class Scraper:
         self.url = None
 
 
-    def scraper(self, sarch_field_xpath, sarch_word, sarch_button_xpath, showcase_box_xpath, price_xpath, image_xpath, url_xpath):
+    def scraper(self, sarch_field_xpath, sarch_word, sarch_button_xpath, showcase_box_xpath, price_xpath, url_xpath):
         '''
         autologinにてサイトが開かれてる状態
         => 検索バーへスプシからのデータを入力して検索
@@ -106,25 +106,6 @@ class Scraper:
 
 
             try:
-                # 画像の場所を特定して変数化
-                # 画像のURLを特定する
-                # １枚目のみ表示
-                self.logger.debug("画像の捜索開始")
-                image_elements = self.chrome.find_elements_by_xpath(image_xpath)
-                # self.logger.debug(f"'image_elements:'{image_elements}")
-
-                if image_elements:
-                    image_url = image_elements[0].get_attribute('src')
-                else:
-                    image_url = None
-
-                self.image_url = image_url
-                self.logger.debug(f"'画像URLの抽出完了:'{self.image_url}")
-
-            except Exception as e:
-                self.logger.debug(f"'画像の処理中にエラー:'{e}")
-
-            try:
                 # URLを入手
                 self.logger.debug("商品URLの捜索開始")
                 url_elements = self.chrome.find_elements_by_xpath(url_xpath)
@@ -143,7 +124,6 @@ class Scraper:
                 
             # ここで各変数の値をログに出力
             self.logger.debug(f"最終的な価格: {self.price}")
-            self.logger.debug(f"最終的な画像URL: {self.image_url}")
             self.logger.debug(f"最終的な商品URL: {self.url}")
 
         # このように最後にログを出力することで、関数の実行が完了した時点での各変数の値を確認できます。
