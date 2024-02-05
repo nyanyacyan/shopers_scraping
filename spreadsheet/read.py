@@ -8,12 +8,15 @@
 
 
 #---流れ--
-# 入力項目=> 日付=> 画像=> JAN=> 商品名=> 価格=> URL
+# SpreadsheetReadクラスにてspreadsheet_readメソッドを設立=> 外部ライブラリのため非同期処理が必要
+# => 非同期処理するためにSpreadsheetReadAsyncクラスを設立
+# => spreadsheet_read_asyncメソッドにより非同期処理ができるようにspreadsheet_readメソッドの行なってる処理（asyncio.get_running_loop）を取得（実際のインスタンスを受け取って非同期処理ができるように加工するイメージ）
 # ---------------------------------------------------------------------------------------------------------
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from dotenv import load_dotenv
 import os
+import asyncio
 
 from logger.debug_logger import Logger
 
@@ -56,4 +59,18 @@ class SpreadsheetRead:
         return mixdata
 
 
+class SpreadsheetReadAsync:
+    def __init__(self, spreadsheet_read_instance):
+        self.spreadsheet_read_instance = spreadsheet_read_instance
+
+    
+    async def spreadsheet_read_async(self):
+        # 現在実行中のイベントループを取得　
+        # イベントループとはスケジューラに近いもの。ここでのループという名前が示すものはプログラムが終了するまで処理を続けるって意味
+        loop = asyncio.get_running_loop()
+
+        # run_in_executorを使って同期的なspreadsheet_readメソッドを非同期で実行
+        mixdata = await loop.run_in_executor(None, self.spreadsheet_read_instance.spreadsheet_read)
+
+        return mixdata
 
