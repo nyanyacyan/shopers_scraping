@@ -20,7 +20,7 @@ class ScraperNetsea(Scraper):
 
         self.netsea_search_field_xpath = "//input[@id='searchInput']"  # search_field_xpath
         self.netsea_search_button_xpath = "//div[@class='searchSubmit']/button[@id='searchBtn' and @class='searchBtn']"  # search_button_xpath
-        self.netsea_showcase_box_xpath = "//section[@class='showcaseType01']"  # showcase_box_xpath
+        self.netsea_showcase_box_xpath = "//section[@class='showcaseWrap gridView']"  # showcase_box_xpath
         self.netsea_price_xpath = "//section[@class='showcaseType01']//p[@class='price']"  # price_xpath
         self.netsea_url_xpath = "//section[@class='showcaseType01']//a[@class='flywheel_event']"  # url_xpath
 

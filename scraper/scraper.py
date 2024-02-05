@@ -15,6 +15,7 @@ from selenium.common.exceptions import NoSuchElementException
 from dotenv import load_dotenv
 import re
 import os
+import asyncio
 
 # 自作モジュール
 from logger.debug_logger import Logger
@@ -74,7 +75,9 @@ class Scraper:
 
         try:
             # 商品ページ（showcasecasebox）があるかどうかを確認
-            self.chrome.find_elements_by_xpath(showcase_box_xpath)
+            self.logger.debug("商品あるか確認")
+            self.chrome.find_element_by_xpath(showcase_box_xpath)
+            self.logger.debug("商品がありました。")
 
             try:
                 # 商品をなるべく厳選できるpathを用意する
@@ -124,7 +127,7 @@ class Scraper:
 
         
         except:
-            self.logger.debug("商品の該当なし")
+            self.logger.error("商品の該当なし")
             return "該当なし"
 
     # 各種の変数を召喚用に作成したメソッド
