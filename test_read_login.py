@@ -16,6 +16,7 @@ import time
 
 # 自作モジュール
 from autologin.autologin_subclass.auto_login_netsea_async import AutoLoginNetsea
+from scraper.scraper_subclass.scaper_netsea_async import ScraperNetsea
 from spreadsheet.read import SpreadsheetRead, SpreadsheetReadAsync
 from logger.debug_logger import Logger
 
@@ -37,24 +38,33 @@ async def main():
     # WebDriverインスタンスを生成
     chrome = webdriver.Chrome(service=service, options=chrome_options)
 
+    # スプシ読込インスタンス
     spreadsheet_read = SpreadsheetRead(debug_mode=True)
-    spreadsheet_read_async = SpreadsheetReadAsync(spreadsheet_read_instance=spreadsheet_read)
+    spreadsheet_read_async = SpreadsheetReadAsync(spreadsheet_read_instance=spreadsheet_read)  # 非同期
 
+    # オートログインインスタンス
     auto_login_netsea = AutoLoginNetsea(chrome=chrome, debug_mode=True)
 
-    start_time_spreadsheet = time.time()
-    print(f"スプレッドシート読み込み開始: {time.ctime(start_time_spreadsheet)}")
-    spreadsheet_data = await spreadsheet_read_async.spreadsheet_read_async()
-    end_time_spreadsheet = time.time()
+    # scraperインスタンス
+    scraper_netsea = ScraperNetsea(chrome=chrome, debug_mode=True)
 
-    start_time_login = time.time()
-    print(f"自動ログイン処理開始: {time.ctime(start_time_login)}")
+    start_time = time.time()
+    print(f"処理開始: {time.ctime(start_time)}")
+
+
+    # スプレッドシートの読み込みと自動ログインを並行して実行
+    dic_data = await spreadsheet_read_async.spreadsheet_read_async()
     await auto_login_netsea.auto_login_netsea_async()
-    end_time_login = time.time()
 
-    print(f"スプレッドシート読み込み時間: {end_time_spreadsheet - start_time_spreadsheet}秒")
-    print(f"自動ログイン処理時間: {end_time_login - start_time_login}秒")
+    for index, (jan, name) in enumerate(dic_data.items()):
+        search_word = f"{jan} {name}"
+        print(f"{index + 1}: {search_word}")
 
+        await scraper_netsea.scraper_netsea(search_word)
+
+    end_time = time.time()
+    print(f"処理終了: {time.ctime(end_time)}")
+    print(f"全体の処理時間: {end_time - start_time}秒")
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
