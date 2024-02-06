@@ -15,7 +15,7 @@ from autologin import AutoLoginNetsea, AutoLoginOroshiuri, AutoLoginPetpochitto,
 from scraper import ScraperNetsea, ScraperPetpochitto, ScraperSuperDelivery, ScraperTajimaya
 from scraper.scraper_subclass.scraper_oroshiuri import ScraperOroshiuri
 
-from spreadsheet.read import SpreadsheetRead
+from spreadsheet.read import SpreadsheetRead, SpreadsheetReadAsync
 
 from spreadsheet.write import SpreadsheetWrite
 
@@ -34,6 +34,7 @@ class Process:
         self.chrome = chrome
 
         self.spreadsheet_read_instance = SpreadsheetRead(self.chrome)
+        self.spreadsheet_read_async_instance = SpreadsheetReadAsync(self.spreadsheet_read_instance)
 
         # netseaインスタンス生成
         self.auto_login_netsea_instance = AutoLoginNetsea(self.chrome)
@@ -44,15 +45,13 @@ class Process:
         self.scraper_oroshiuri_instance = ScraperOroshiuri(self.chrome)
 
 
-    def process_scraper_netsea(self):
-        dic_data = self.spreadsheet_read_instance.spreadsheet_read()
+    async def process_scraper_netsea(self):
+        dic_data = await self.spreadsheet_read_async_instance.spreadsheet_read_async()
         self.logger.debug(f"スプシ記載されたJAN、商品名: {dic_data}")
 
         for index, (jan, name) in enumerate(dic_data.items()):
             search_word = f"{jan} {name}"
             self.logger.debug(f"{index + 1}: {search_word}")
-
-
 
             self.logger.debug("netseaオートログイン開始")
             self.auto_login_netsea_instance.auto_login_netsea()
