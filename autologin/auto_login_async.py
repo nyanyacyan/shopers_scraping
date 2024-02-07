@@ -69,8 +69,7 @@ class AutoLogin:
         current_url = self.chrome.current_url
         self.logger.debug(current_url)
 
-        # ログイン画面のスクショ
-        # self.chrome.save_screenshot("login_before_take")
+
 
         # userid_xpathが出てくるまで待機
         try:
@@ -147,10 +146,6 @@ class AutoLogin:
             )
             self.logger.debug("ログインページ読み込み完了")
 
-            # ログイン画面のスクショ
-            login_screenshot_name = "login_after_take.png"
-            self.chrome.save_screenshot(login_screenshot_name)
-
         except Exception as e:
             self.logger.error(f"handle_recaptcha を実行中にエラーが発生しました: {e}")
 
@@ -168,20 +163,6 @@ class AutoLogin:
             # self.slack_notify.slack_image_notify("ログインに失敗。")
 
         time.sleep(1)
-
-
-        # スクショファイルを削除
-        try:
-            if os.path.exists(login_screenshot_name):
-                os.remove(login_screenshot_name)
-                self.logger.debug(f"'{login_screenshot_name}'を削除")
-                self.logger.info("処理完了")
-            else:
-                self.logger.error(f"'{login_screenshot_name}'が見つまりませんでした。")
-
-        except Exception as e:
-            self.logger.error(f"ファイル削除中にエラーが発生しました: {e}")
-
 
     # 同期メソッドを非同期処理に変換
     async def auto_login_async(self, login_url, userid, password, userid_xpath, password_xpath, login_button_xpath, cart_element_xpath):

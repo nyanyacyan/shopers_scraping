@@ -49,7 +49,7 @@ class AutoScraperOroshiuri:
         await auto_login_oroshiuri.auto_login_oroshiuri_async()
         self.logger.info("oroshiuriオートログイン完了")
 
-        self.chrome.save_screenshot("loginafter.png")
+
 
         self.logger.info("oroshiuriスクレイピング開始")
         oroshiuri_data = await scraper_oroshiuri.scraper_oroshiuri_async(search_word)

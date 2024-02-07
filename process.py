@@ -58,7 +58,7 @@ class Process:
             self.logger.debug("netseaオートログイン完了")
 
             self.logger.debug("netseaスクレイピング開始")
-            self.chrome.save_screenshot("before{index}.png")
+
             self.scraper_netsea_instance.scraper_netsea(search_word)
             self.logger.debug("netseaスクレイピング終了")
 

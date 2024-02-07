@@ -49,7 +49,7 @@ class AutoScraperNetsea:
         await auto_login_netsea.auto_login_netsea_async()
         self.logger.info("netseaオートログイン完了")
 
-        self.chrome.save_screenshot("loginafter.png")
+
 
         self.logger.info("netseaスクレイピング開始")
         netsea_data = await scraper_netsea.scraper_netsea_async(search_word)

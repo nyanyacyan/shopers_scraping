@@ -38,7 +38,7 @@ class SpreadsheetRead:
 
         self.gs = gspread.authorize(credentials)
 
-        self.spreadsheet_key = os.getenv('SPREADSHEET_SITE_URL')
+        self.spreadsheet_key = os.getenv('SPREADSHEET_KEY')
 
     
     def spreadsheet_read(self):

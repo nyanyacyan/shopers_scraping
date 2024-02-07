@@ -58,7 +58,6 @@ class Scraper:
             self.logger.debug("検索バーに入力開始")
             search_field.send_keys(search_word)
             
-            self.chrome.save_screenshot("sendkey.png")
             self.logger.debug("検索バーに入力完了")
 
             time.sleep(1)
@@ -73,7 +72,6 @@ class Scraper:
 
             # # 検索ボタンを押す
             # self.logger.debug("クリック開始")
-            # self.chrome.save_screenshot("buttan_click_before.png")
             # self.chrome.execute_script("arguments[0].click();", login_button)
             # self.logger.debug("クリック完了")
 
@@ -87,8 +85,6 @@ class Scraper:
             lambda d: d.execute_script("return document.readyState") == "complete"
         )
         self.logger.debug("ページは完全に表示されてる")
-
-        self.chrome.save_screenshot("searchafter.png")
 
 
         try:
@@ -170,6 +166,6 @@ class Scraper:
         self.logger.debug(f"search_word: {search_word}")
 
         self.logger.debug(f"result: {result}")
-        self.chrome.save_screenshot("result.png")
+
 
         return result

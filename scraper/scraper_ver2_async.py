@@ -157,6 +157,5 @@ class ScraperVer2:
         self.logger.debug(f"search_word: {search_word}")
 
         self.logger.debug(f"result: {result}")
-        self.chrome.save_screenshot("result.png")
 
         return result
