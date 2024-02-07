@@ -37,7 +37,7 @@ class Scraper:
         self.url = None
 
 
-    def scraper(self, sarch_field_xpath, sarch_word, sarch_button_xpath, showcase_box_xpath, price_xpath, url_xpath):
+    def scraper(self, search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath, url_xpath):
         '''
         autologinにてサイトが開かれてる状態
         => 検索バーへスプシからのデータを入力して検索
@@ -46,13 +46,13 @@ class Scraper:
         try:
             # 検索バーを探して入力
             self.logger.debug("検索バーを特定開始")
-            sarch_field = self.chrome.find_element_by_xpath(sarch_field_xpath)
-            sarch_field.send_keys(sarch_word)
+            search_field = self.chrome.find_element_by_xpath(search_field_xpath)
+            search_field.send_keys(search_word)
             self.logger.debug("検索バーを発見")
 
             # 検索ボタンを探す
             self.logger.debug("buttanサーチ開始")
-            login_button = self.chrome.find_element_by_xpath(sarch_button_xpath)
+            login_button = self.chrome.find_element_by_xpath(search_button_xpath)
             self.logger.debug("buttanサーチ、OK")
 
 

@@ -11,7 +11,7 @@
 # ----------------------------------------------------------------------------------
 from dotenv import load_dotenv
 import os
-import asyncio
+
 
 from autologin.auto_login_async import AutoLogin
 

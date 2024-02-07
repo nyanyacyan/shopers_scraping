@@ -26,7 +26,7 @@ class ScraperNetsea(Scraper):
 
     #  search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath
     async def scraper_netsea_async(self, search_word):
-        await self.scraper_async(
+        result = await self.scraper_async(
             self.netsea_search_field_xpath,
             search_word,
             self.netsea_search_button_xpath,
@@ -34,3 +34,4 @@ class ScraperNetsea(Scraper):
             self.netsea_price_xpath,
             self.netsea_url_xpath
         )
+        return result
