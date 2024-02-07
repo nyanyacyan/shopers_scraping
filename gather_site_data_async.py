@@ -13,7 +13,8 @@ class GatherSiteDataAsync:
         self.logger = self.logger_instance.get_logger()
         self.debug_mode = debug_mode
 
-    async def gather_site_data_async(self):
+    async def gather_site_data_async(self, search_word):
+        # search_word = f"9784861488542 れんそうカード"
         # 各クラスのインスタンスを作成
         netsea_scraper = AutoScraperNetsea(debug_mode=True)
         oroshiuri_scraper = AutoScraperOroshiuri(debug_mode=True)
@@ -21,8 +22,8 @@ class GatherSiteDataAsync:
         # 並列処理を実施して、それぞれの変数に代入
         self.logger.debug("並列処理開始")
         netsea_result, oroshiuri_result = await asyncio.gather(
-            netsea_scraper.auto_scraper_netsea_async(),
-            oroshiuri_scraper.auto_scraper_oroshiuri_async()
+            netsea_scraper.auto_scraper_netsea_async(search_word),
+            oroshiuri_scraper.auto_scraper_oroshiuri_async(search_word)
         )
         self.logger.debug("並列処理完了")
 

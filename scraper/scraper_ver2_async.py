@@ -131,16 +131,10 @@ class ScraperVer2:
             self.url = self.chrome.current_url
 
         # showcaseがなかった場合は商品がない
-        except:
+        except NoSuchElementException:
             self.logger.error("商品の該当なし")
-            return "該当なし"
-
-    # 各種の変数を召喚用に作成したメソッド
-    def get_price(self):
-        return self.price
-    
-    def get_url(self):
-        return self.url
+            self.price = "該当なし"
+            self.url = None
 
 
         # 同期メソッドを非同期処理に変換

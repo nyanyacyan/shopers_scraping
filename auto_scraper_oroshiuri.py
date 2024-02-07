@@ -36,9 +36,7 @@ class AutoScraperOroshiuri:
         self.debug_mode = debug_mode
 
 
-    async def auto_scraper_oroshiuri_async(self):
-        search_word = f"9784861488542 れんそうカード"  # 例としてあげてる=> 後で受けられるように変更必要
-
+    async def auto_scraper_oroshiuri_async(self, search_word):
         # autologinインスタンス
         auto_login_oroshiuri = AutoLoginOroshiuri(chrome=self.chrome, debug_mode=self.debug_mode)
 

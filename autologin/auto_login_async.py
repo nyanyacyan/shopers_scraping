@@ -16,6 +16,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from dotenv import load_dotenv
@@ -99,34 +100,51 @@ class AutoLogin:
         )
         self.logger.debug("ページは完全に表示されてる")
 
+
+        WebDriverWait(self.chrome, 10).until(
+            EC.visibility_of_element_located((By.XPATH, login_button_xpath))
+        )
+        self.logger.debug("ボタンDOMの読み込みは完了してる")
+
+
         # reCAPTCHA検知
         try:
             # sitekeyを検索
-            self.chrome.find_element_by_css_selector('[data-sitekey]')
-            self.logger.info("reCAPTCHA処理実施中")
+            elements = self.chrome.find_elements_by_css_selector('[data-sitekey]')
+            if len(elements) > 0:
+                self.logger.info("reCAPTCHA処理実施中")
 
 
-            # solveRecaptchaファイルを実行
-            try:
-                self.recaptcha_solver.handle_recaptcha(current_url)
-                self.logger.info("reCAPTCHA処理、完了")
+                # solveRecaptchaファイルを実行
+                try:
+                    self.recaptcha_solver.handle_recaptcha(current_url)
+                    self.logger.info("reCAPTCHA処理、完了")
 
-            except Exception as e:
-                self.logger.error("reCAPTCHA処理に失敗しました")
-                # ログイン失敗をライン通知
-                self.line_notify.line_notify("ログインが正しくできませんでした")
+                except Exception as e:
+                    self.logger.error("reCAPTCHA処理に失敗しました")
+                    # ログイン失敗をライン通知
+                    self.line_notify.line_notify("ログインが正しくできませんでした")
 
 
-            self.logger.debug("クリック開始")
+                self.logger.debug("クリック開始")
 
-            # ログインボタン要素を見つける
-            login_button = self.chrome.find_element_by_id("recaptcha-submit")
+                # ログインボタン要素を見つける
+                login_button = self.chrome.find_element_by_id("recaptcha-submit")
 
-            # ボタンが無効化されているか確認し、無効化されていれば有効にする
-            self.chrome.execute_script("document.getElementById('recaptcha-submit').disabled = false;")
+                # ボタンが無効化されているか確認し、無効化されていれば有効にする
+                self.chrome.execute_script("document.getElementById('recaptcha-submit').disabled = false;")
 
-            # ボタンをクリックする
-            login_button.click()
+                # ボタンをクリックする
+                login_button.click()
+
+            else:
+                self.logger.info("reCAPTCHAなし")
+
+                login_button = self.chrome.find_element_by_xpath(login_button_xpath)
+                self.logger.debug("ボタン捜索完了")
+
+                login_button.send_keys(Keys.ENTER)
+                self.logger.debug("クリック完了")
 
 
         # recaptchaなし
@@ -134,17 +152,20 @@ class AutoLogin:
             self.logger.info("reCAPTCHAなし")
 
             login_button = self.chrome.find_element_by_xpath(login_button_xpath)
-            self.chrome.execute_script("arguments[0].click();", login_button)
+            self.logger.debug("ボタン捜索完了")
+
+            login_button.send_keys(Keys.ENTER)
             self.logger.debug("クリック完了")
 
 
         # ページ読み込み待機
         try:
             # ログインした後のページ読み込みの完了確認
-            WebDriverWait(self.chrome, 10).until(
+            WebDriverWait(self.chrome, 5).until(
             lambda driver: driver.execute_script('return document.readyState') == 'complete'
             )
             self.logger.debug("ログインページ読み込み完了")
+
 
         except Exception as e:
             self.logger.error(f"handle_recaptcha を実行中にエラーが発生しました: {e}")
@@ -157,8 +178,8 @@ class AutoLogin:
             # self.chatwork_notify.chatwork_notify("ログインに成功")
 
         except NoSuchElementException:
-            self.logger.info(f"カートの確認が取れませんでした")
-            self.chatwork_notify.chatwork_image_notify("ログインに失敗。")
+            self.logger.error(f"カートの確認が取れませんでした")
+            # self.chatwork_notify.chatwork_image_notify("ログインに失敗。")
             # self.line_notify.line_image_notify("ログインに失敗。")
             # self.slack_notify.slack_image_notify("ログインに失敗。")
 

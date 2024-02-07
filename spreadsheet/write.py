@@ -42,14 +42,14 @@ class SpreadsheetWrite:
         
 
 
-    async def spreadsheet_write(self):
+    async def spreadsheet_write_async(self, search_word):
         # インスタンス化
         gatherer = GatherSiteDataAsync()
         # それぞれのワークシートを定義
         worksheet = self.gs.open_by_key(self.spreadsheet_key).worksheet("リサーチツール")
 
         # 集計データ読み込み
-        sites_data = await gatherer.gather_site_data_async()
+        sites_data = await gatherer.gather_site_data_async(search_word)
         self.logger.debug(sites_data)
 
         # 現在の日付を YYYY-MM-DD 形式で取得
@@ -72,7 +72,12 @@ class SpreadsheetWrite:
         self.logger.debug("全サイトデータをスプシに書き込み開始")
         start_cell = 5  # E列は「５」
         for item in sites_data:
-            hyperlink = f'=HYPERLINK("{item["url"]}", "{item["price"]}")'
+            if item["price"] != "該当なし":
+                price_text = f'{item["price"]} 円'
+            else:
+                price_text = item["price"]
+
+            hyperlink = f'=HYPERLINK("{item["url"]}", "{price_text}")'
 
             try:
                 worksheet.update_cell(first_blank_cell, start_cell, hyperlink)

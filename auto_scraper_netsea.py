@@ -36,9 +36,7 @@ class AutoScraperNetsea:
         self.debug_mode = debug_mode
 
 
-    async def auto_scraper_netsea_async(self):
-        search_word = f"9784861488542 れんそうカード"  # 例としてあげてる=> 後で受けられるように変更必要
-
+    async def auto_scraper_netsea_async(self, search_word):
         # autologinインスタンス
         auto_login_netsea = AutoLoginNetsea(chrome=self.chrome, debug_mode=self.debug_mode)
 
@@ -48,8 +46,6 @@ class AutoScraperNetsea:
         self.logger.info("netseaオートログイン開始")
         await auto_login_netsea.auto_login_netsea_async()
         self.logger.info("netseaオートログイン完了")
-
-
 
         self.logger.info("netseaスクレイピング開始")
         netsea_data = await scraper_netsea.scraper_netsea_async(search_word)
