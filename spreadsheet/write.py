@@ -59,19 +59,23 @@ class SpreadsheetWrite:
         last_cell_data = worksheet.col_values(2)
         self.logger.debug(last_cell_data)
 
-        last_writed_cell = len(last_cell_data) + 1
-        self.logger.debug(last_writed_cell)
+        # 最初の空白
+        first_blank_cell = len(last_cell_data) + 1
+        self.logger.debug(first_blank_cell)
 
         # 日付の挿入
-        worksheet.update_cell(last_writed_cell, 2, current_date)
+        self.logger.debug("日付の挿入開始")
+        worksheet.update_cell(first_blank_cell, 2, current_date)
+        self.logger.debug("日付の挿入終了")
 
         # E列から順番に追記していく
+        self.logger.debug("全サイトデータをスプシに書き込み開始")
         start_cell = 5  # E列は「５」
         for item in sites_data:
             hyperlink = f'=HYPERLINK("{item["url"]}", "{item["price"]}")'
 
             try:
-                worksheet.update_cell(last_writed_cell, start_cell, hyperlink)
+                worksheet.update_cell(first_blank_cell, start_cell, hyperlink)
             except gspread.exceptions.APIError as e:
                 self.logger.error(f"APIエラーが発生しました: {e}")
             except RefreshError as e:
@@ -80,3 +84,5 @@ class SpreadsheetWrite:
                 self.logger.error(f"HTTPエラーが発生しました: {e}")
 
             start_cell += 1
+
+        self.logger.debug("全サイトデータをスプシに書き込み完了")
