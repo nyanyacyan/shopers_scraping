@@ -12,5 +12,6 @@ logs/
 *.png
 
 venv_shopers_scraping/
-Icon\r
-Icon\r
+
+# テストファイルを無視する。
+*test*
