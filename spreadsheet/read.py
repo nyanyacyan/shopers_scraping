@@ -11,6 +11,7 @@
 # SpreadsheetReadクラスにてspreadsheet_readメソッドを設立=> 外部ライブラリのため非同期処理が必要
 # => 非同期処理するためにSpreadsheetReadAsyncクラスを設立
 # => spreadsheet_read_asyncメソッドにより非同期処理ができるようにspreadsheet_readメソッドの行なってる処理（asyncio.get_running_loop）を取得（実際のインスタンスを受け取って非同期処理ができるように加工するイメージ）
+# 非同期処理は基本使わない方がいい→非同期処理は
 # ---------------------------------------------------------------------------------------------------------
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
