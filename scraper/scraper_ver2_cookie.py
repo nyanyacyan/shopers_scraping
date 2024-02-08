@@ -2,6 +2,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 from dotenv import load_dotenv
+import pickle
 import os
 import re
 import asyncio
@@ -31,12 +32,44 @@ class ScraperVer2:
 
 
 
-    def scraper_ver2(self, search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, jump_link_xpath, price_xpath):
+    def scraper_ver2(self, web_url, cookies_file_name, cart_element_xpath, search_field_xpath, search_word, showcase_box_xpath, jump_link_xpath, price_xpath):
         '''
-        autologinにてサイトが開かれてる状態
-        => 検索バーへスプシからのデータを入力して検索
-        => 開いたサイトから
+        Cookieを使ってログインしてログイン状態をキープして繰り返しスクレイピング。
         '''
+        # ログインされた後のメインURLを設定
+        web_url = web_url
+
+        # 保存してあるCookieファイルを選定
+        cookies_file_name = cookies_file_name
+
+        # Cookieファイルを展開
+        try:
+            cookies = pickle.load(open('/Users/nyanyacyan/Desktop/ProgramFile/project_file/shopers_scraping/scraper/scraper_subclass/cookies/' + cookies_file_name, 'rb'))
+
+        except FileNotFoundError as e:
+            self.logger.error(f"ファイルが見つかりません:{e}")
+
+        except Exception as e:
+            self.logger.error(f"処理中にエラーが起きました:{e}")
+
+        self.chrome.get(web_url)
+        self.logger.info("メイン画面にアクセス")
+
+        # Cookieを設定
+        for c in cookies:
+            self.chrome.add_cookie(c)
+
+        self.chrome.get(web_url)
+        self.logger.info("Cookieを使ってメイン画面にアクセス")
+
+        try:
+            self.chrome.find_element_by_xpath(cart_element_xpath)
+            self.logger.info("ログイン完了")
+
+        except NoSuchElementException as e:
+            self.logger.error(f"ログインができてない。{e}")
+
+        
         try:
             # 検索バーを探して入力
             self.logger.debug("検索バーを特定開始")
@@ -138,11 +171,11 @@ class ScraperVer2:
 
 
         # 同期メソッドを非同期処理に変換
-    async def scraper_ver2_async(self, search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath, url_xpath):
+    async def scraper_ver2_async(self, web_url, cookies_file_name, cart_element_xpath, search_field_xpath, search_word, showcase_box_xpath, jump_link_xpath, price_xpath):
         loop = asyncio.get_running_loop()
 
         # ブロッキング、実行タイミング、並列処理などを適切に行えるように「functools」にてワンクッション置いて実行
-        await loop.run_in_executor(executor, functools.partial(self.scraper_ver2, search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath, url_xpath))
+        await loop.run_in_executor(executor, functools.partial(self.scraper_ver2, web_url, cookies_file_name, cart_element_xpath, search_field_xpath, search_word, showcase_box_xpath, jump_link_xpath, price_xpath))
         self.logger.debug(f"scraper execution finished: price={self.price}, url={self.url}")
         result = {
             "price": self.price,

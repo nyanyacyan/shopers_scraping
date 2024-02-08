@@ -58,7 +58,7 @@ class Scraper:
 
     def scraper(self, web_url, cookies_file_name, cart_element_xpath, search_field_xpath, search_word, showcase_box_xpath, price_xpath, url_xpath):
         '''
-        Cookieを使ってログインする。
+        Cookieを使ってログインしてログイン状態をキープして繰り返しスクレイピング。
         '''
         # ログインされた後のメインURLを設定
         web_url = web_url
