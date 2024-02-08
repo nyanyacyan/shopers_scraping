@@ -1,3 +1,7 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
@@ -17,14 +21,22 @@ load_dotenv()
 executor = ThreadPoolExecutor(max_workers=5)
 
 class ScraperVer2:
-    def __init__(self, chrome, debug_mode=False):
+    def __init__(self, debug_mode=False):
         # Loggerクラスを初期化
         debug_mode = os.getenv('DEBUG_MODE', 'False') == 'True'
         self.logger_instance = Logger(__name__, debug_mode=debug_mode)
         self.logger = self.logger_instance.get_logger()
         self.debug_mode = debug_mode
 
-        self.chrome = chrome
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")  # ヘッドレスモードで実行
+        chrome_options.add_argument("--window-size=1680,1200")  # ウィンドウサイズの指定
+
+        # ChromeDriverManagerを使用して自動的に適切なChromeDriverをダウンロードし、サービスを設定
+        service = Service(ChromeDriverManager().install())
+
+        # WebDriverインスタンスを生成
+        self.chrome = webdriver.Chrome(service=service, options=chrome_options)
 
         # データ格納するための箱
         self.price = None

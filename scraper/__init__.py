@@ -1,5 +1,0 @@
-from .scraper_subclass.scraper_netsea import ScraperNetsea
-from .scraper_subclass.scraper_oroshiuri import ScraperOroshiuri
-from .scraper_subclass.scraper_petpochitto import ScraperPetpochitto
-from .scraper_subclass.scraper_super_delivery import ScraperSuperDelivery
-from .scraper_subclass.scraper_tajimaya import ScraperTajimaya
