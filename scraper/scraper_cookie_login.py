@@ -19,6 +19,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 from dotenv import load_dotenv
 import pickle
+import requests
 import re
 import os
 import asyncio
@@ -85,6 +86,30 @@ class Scraper:
 
         self.chrome.get(web_url)
         self.logger.info("Cookieを使ってメイン画面にアクセス")
+
+
+        if web_url != self.chrome.current_url:
+            self.logger.info("Cookieでのログイン成功")
+
+        else:
+            self.logger.info("Cookieでのログイン失敗")
+            session = requests.Session()
+
+            for cookie in cookies:
+                session.cookies.set(cookie['name'], cookie['value'], domain=cookie['domain'])
+
+            response = session.get(web_url)
+            if "ログイン成功の条件" in response.text:
+                self.logger.info("requestsによるCookieでのログイン成功")
+            else:
+                self.logger.info("requestsによるCookieでのログイン失敗")
+
+
+        self.chrome.save_screenshot('cookie_login_after.png')
+
+
+
+
 
         try:
             self.chrome.find_element_by_xpath(cart_element_xpath)

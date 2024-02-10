@@ -19,7 +19,6 @@ class AutoLoginNetsea(AutoLogin):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
-
         self.url_netsea = os.getenv('URL_NETSEA')  # login_url
         self.id_netsea = os.getenv('ID_NETSEA')  # userid
         self.password_netsea = os.getenv('PASSWORD_NETSEA')  # password
@@ -60,7 +59,6 @@ class AutoLoginOroshiuri(AutoLogin):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
-
         self.url_oroshiuri = os.getenv('URL_OROSHIURI')  # login_url
         self.id_oroshiuri = os.getenv('ID_OROSHIURI')  # userid
         self.password_oroshiuri = os.getenv('PASSWORD_OROSHIURI')  # password
@@ -89,18 +87,9 @@ class AutoLoginOroshiuri(AutoLogin):
 # ３----------------------------------------------------------------------------------
 
 
-from dotenv import load_dotenv
-import os
-
-# 自作モジュール
-from autologin.auto_login_cookie import AutoLogin
-
-load_dotenv()  # .env ファイルから環境変数を読み込む
-
 class AutoLoginPetpochitto(AutoLogin):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
-
 
         self.url_petpochitto = os.getenv('URL_PETPOCHITTO')  # login_url
         self.id_petpochitto = os.getenv('ID_PETPOCHITTO')  # userid
@@ -130,27 +119,18 @@ class AutoLoginPetpochitto(AutoLogin):
 # ４----------------------------------------------------------------------------------
 
 
-from dotenv import load_dotenv
-import os
-
-# 自作モジュール
-from autologin.auto_login_cookie import AutoLogin
-
-load_dotenv()  # .env ファイルから環境変数を読み込む
-
 class AutoLoginSuperDelivery(AutoLogin):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
-
         self.url_super_delivery = os.getenv('URL_SUPER_DELIVERY')  # login_url
         self.id_super_delivery = os.getenv('ID_SUPER_DELIVERY')  # userid
         self.password_super_delivery = os.getenv('PASSWORD_SUPER_DELIVERY')  # password
-        self.userid_xpath_super_delivery = "//input[@name='loginEmail']"  # userid_xpath
-        self.password_xpath_super_delivery = "//input[@name='loginPassword']"  # password_xpath
-        self.login_button_xpath_super_delivery = "//input[@name='login']"  # login_button_xpath
-        self.cart_element_xpath_super_delivery = "//img[contains(@src, 'cart') and contains(@alt, '買い物カゴ')]"  # cart_element_xpath
-        self.remember_box_xpath_super_delivery = ""  # remember_box_xpath
+        self.userid_xpath_super_delivery = "//input[@name='identification']"  # userid_xpath
+        self.password_xpath_super_delivery = "//input[@name='password']"  # password_xpath
+        self.login_button_xpath_super_delivery = "//div[@class='co-btn co-btn-red co-btn-m co-btn-page']//input[@type='submit'][@value='ログイン']"  # login_button_xpath
+        self.cart_element_xpath_super_delivery = "//td[@id='price-btn-area']"  # cart_element_xpath
+        self.remember_box_xpath_super_delivery = ""  # remember_box_xpath　なし
         self.cookies_file_name_super_delivery = "super_delivery_cookie_file.pkl"  # cookies_file_name
 
 
@@ -171,18 +151,9 @@ class AutoLoginSuperDelivery(AutoLogin):
 # ５----------------------------------------------------------------------------------
 
 
-from dotenv import load_dotenv
-import os
-
-# 自作モジュール
-from autologin.auto_login_cookie import AutoLogin
-
-load_dotenv()  # .env ファイルから環境変数を読み込む
-
 class AutoLoginTajimaya(AutoLogin):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
-
 
         self.url_tajimaya = os.getenv('URL_TAJIMAYA')  # login_url
         self.id_tajimaya = os.getenv('ID_TAJIMAYA')  # userid
@@ -191,7 +162,7 @@ class AutoLoginTajimaya(AutoLogin):
         self.password_xpath_tajimaya = "//input[@name='loginPassword']"  # password_xpath
         self.login_button_xpath_tajimaya = "//input[@type='submit']"  # login_button_xpath
         self.cart_element_xpath_tajimaya = "//a[contains(@href, 'cart') and .//em[contains(@class, 'material-icons')]]"  # cart_element_xpath
-        self.remember_box_xpath_tajimaya = ""  # remember_box_xpath
+        self.remember_box_xpath_tajimaya = "//div[@class='__remember']//input[@name='remember']"  # remember_box_xpath
         self.cookies_file_name_tajimaya = "tajimaya_cookie_file.pkl"  # cookies_file_name
 
 
@@ -210,5 +181,3 @@ class AutoLoginTajimaya(AutoLogin):
 
 
 # ----------------------------------------------------------------------------------
-
-

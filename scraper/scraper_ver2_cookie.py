@@ -10,6 +10,7 @@ import pickle
 import os
 import re
 import asyncio
+import requests
 from concurrent.futures import ThreadPoolExecutor
 import functools
 import time
@@ -74,6 +75,25 @@ class ScraperVer2:
         self.chrome.get(web_url)
         self.logger.info("Cookieを使ってメイン画面にアクセス")
 
+
+        if web_url != self.chrome.current_url:
+            self.logger.info("Cookieでのログイン成功")
+
+        else:
+            self.logger.info("Cookieでのログイン失敗")
+            session = requests.Session()
+
+            for cookie in cookies:
+                session.cookies.set(cookie['name'], cookie['value'], domain=cookie['domain'])
+
+            response = session.get(web_url)
+            if "ログイン成功の条件" in response.text:
+                self.logger.info("requestsによるCookieでのログイン成功")
+            else:
+                self.logger.info("requestsによるCookieでのログイン失敗")
+
+
+
         try:
             self.chrome.find_element_by_xpath(cart_element_xpath)
             self.logger.info("ログイン完了")
@@ -131,8 +151,22 @@ class ScraperVer2:
             try:
                 self.logger.debug("リンク貼り付け箇所を捜索開始")
                 jump_link = self.chrome.find_element_by_xpath(jump_link_xpath)
-                jump_link.click()
                 self.logger.debug("リンク貼り付け箇所を捜索完了")
+
+                old_url = self.chrome.current_url
+
+                # jump_link.click()
+                self.chrome.execute_script("arguments[0].click();", jump_link)
+
+                time.sleep(3)
+
+                new_url = self.chrome.current_url
+
+                if new_url != old_url:
+                    self.logger.debug("ページ遷移成功")
+                else:
+                    self.logger.error("ページ遷移失敗")
+
 
             except NoSuchElementException as e:
                 self.logger.error("リンクが貼り付けてる箇所が見つけられませんでした。")
@@ -145,6 +179,10 @@ class ScraperVer2:
                 lambda d: d.execute_script("return document.readyState") == "complete"
             )
             self.logger.debug("ページは完全に表示されてる")
+
+
+            self.chrome.save_screenshot('price_before.png')
+
 
 
             # 価格要素抽出

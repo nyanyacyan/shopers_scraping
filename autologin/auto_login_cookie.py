@@ -22,6 +22,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import InvalidSelectorException
 from selenium.common.exceptions import ElementNotInteractableException
 from selenium.common.exceptions import TimeoutException
 from dotenv import load_dotenv
@@ -31,6 +32,7 @@ import time
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import functools
+import datetime
 
 # モジュール
 from logger.debug_logger import Logger
@@ -128,10 +130,19 @@ class AutoLogin:
         except ElementNotInteractableException as e:
             self.logger.error(f"チェックボックスが見つかりません。{e}")
 
-        # remember_boxをクリックする
-        remember_box.click()
-        self.logger.debug("チェックボタンをクリック")
+        except InvalidSelectorException:
+            self.logger.debug("チェックボックスないためスキップ")
 
+        try:
+            if remember_box:
+            # remember_boxをクリックする
+                remember_box.click()
+            self.logger.debug("チェックボタンをクリック")
+
+        except UnboundLocalError:
+            self.logger.debug("チェックボタンなし")
+
+        time.sleep(1)
 
         # reCAPTCHA検知
         try:
@@ -180,8 +191,13 @@ class AutoLogin:
             login_button = self.chrome.find_element_by_xpath(login_button_xpath)
             self.logger.debug("ボタン捜索完了")
 
-            login_button.send_keys(Keys.ENTER)
-            self.logger.debug("クリック完了")
+            try:
+                login_button.send_keys(Keys.ENTER)
+                self.logger.debug("クリック完了")
+
+            except ElementNotInteractableException:
+                self.chrome.execute_script("arguments[0].click();", login_button)
+                self.logger.debug("JavaScriptを使用してクリック実行")
 
 
         # ページ読み込み待機
@@ -205,9 +221,21 @@ class AutoLogin:
             self.logger.info("ログイン完了")
             # self.chatwork_notify.chatwork_notify("ログインに成功")
 
+            timestamp = 1742074325
+            expiry_date = datetime.datetime.utcfromtimestamp(timestamp)
+            print(expiry_date)
+
             # Cookieを取得する
             cookies = self.chrome.get_cookies()
             self.logger.debug("Cookieの取得完了")
+
+            # クッキーの存在を確認
+            if cookies:
+                self.logger.debug("クッキーが存在します。")
+                for cookie in cookies:
+                    self.logger.debug(cookie)  # クッキーの詳細を表示
+            else:
+                self.logger.debug("クッキーが存在しません。")
 
             # Cookieをscraper.subに保存する
             pickle.dump(cookies,open('/Users/nyanyacyan/Desktop/ProgramFile/project_file/shopers_scraping/scraper/scraper_subclass/cookies/' + cookies_file_name, 'wb'))

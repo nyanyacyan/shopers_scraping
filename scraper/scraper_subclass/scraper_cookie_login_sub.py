@@ -14,7 +14,7 @@ import os
 
 load_dotenv()  # .env ファイルから環境変数を読み込む
 
-class ScraperNetsea(Scraper):
+class ScraperNetsea(ScraperVer2):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
@@ -23,20 +23,20 @@ class ScraperNetsea(Scraper):
         self.netsea_cart_element_xpath = "//li[@class='header_cart_link']"  # cart_element_xpath
         self.netsea_search_field_xpath = "//input[@id='searchInput']"  # search_field_xpath
         self.netsea_showcase_box_xpath = "//div[@class='showcaseWrap gridView']"  # showcase_box_xpath
-        self.netsea_price_xpath = "//div[@class='priceBox']//p[@class='afterPrice']"  # price_xpath
-        self.netsea_url_xpath = "//section[@class='showcaseType01']//a[@class='flywheel_event']"  # url_xpath
+        self.netsea_jump_link_xpath = "//div[@class='showcaseBox']//h3[@class='showcaseHd']/a"  # jump_link_xpath
+        self.netsea_price_xpath = "//table[@class='tableType03 summaryPriceTable']//span[@class='price']"  # price_xpath
 
     #  web_url, cookies_file_name, cart_element_xpath, search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath, url_xpath
     async def scraper_netsea_async(self, search_word):
-        result = await self.scraper_async(
+        result = await self.scraper_ver2_async(
             self.netsea_web_url,
             self.netsea_cookies_file_name,
             self.netsea_cart_element_xpath,
             self.netsea_search_field_xpath,
             search_word,
             self.netsea_showcase_box_xpath,
-            self.netsea_price_xpath,
-            self.netsea_url_xpath
+            self.netsea_jump_link_xpath,
+            self.netsea_price_xpath
         )
         return result
     
@@ -71,7 +71,7 @@ class ScraperOroshiuri(ScraperVer2):
         return result
     
 
-    # 3---------------------------------------------------------------------------------------------------------
+# 3---------------------------------------------------------------------------------------------------------
 
 
 class ScraperPetpochitto(ScraperVer2):
@@ -88,7 +88,7 @@ class ScraperPetpochitto(ScraperVer2):
 
 
     async def scraper_petpochitto_async(self, search_word):
-        result = await self.scraper_async(
+        result = await self.scraper_ver2_async(
             self.petpochitto_web_url,
             self.petpochitto_cookies_file_name,
             self.petpochitto_cart_element_xpath,
@@ -103,7 +103,7 @@ class ScraperPetpochitto(ScraperVer2):
     
 
 # 4---------------------------------------------------------------------------------------------------------
-    
+# クッキーでのログインができないため別の方法に置き換え
 
 class ScraperSuperDelivery(Scraper):
     def __init__(self, debug_mode=False):
@@ -111,10 +111,11 @@ class ScraperSuperDelivery(Scraper):
 
         self.super_delivery_web_url = os.getenv("URL_SUPER_DELIVERY")  # web_url
         self.super_delivery_cookies_file_name = "super_delivery_cookie_file.pkl"  # cookies_file_name
-        self.super_delivery_cart_element_xpath = "//img[contains(@src, 'cart') and contains(@alt, '買い物カゴ')]"  # cart_element_xpath
-        self.super_delivery_search_field_xpath = ""  # search_field_xpath
-        self.super_delivery_showcase_box_xpath = ""  # showcase_box_xpath
-        self.super_delivery_price_xpath = ""  # price_xpath
+        self.super_delivery_cart_element_xpath = "//div[@id='point-num1']"  # cart_element_xpath
+        self.super_delivery_search_field_xpath = "//input[@id='header_word']"  # search_field_xpath
+        self.super_delivery_showcase_box_xpath = "//div[@class='itembox-parts']"  # showcase_box_xpath
+        self.super_delivery_price_xpath = "//div[@class='item-price-box']"  # price_xpath
+        self.super_delivery_url_xpath = "//a[contains(@onclick, 'suggestRequest')]"
 
 
     async def scraper_super_delivery_async(self, search_word):
