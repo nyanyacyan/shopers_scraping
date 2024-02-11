@@ -232,8 +232,8 @@ class AutoLogin:
             # クッキーの存在を確認
             if cookies:
                 self.logger.debug("クッキーが存在します。")
-                for cookie in cookies:
-                    self.logger.debug(cookie)  # クッキーの詳細を表示
+                # for cookie in cookies:
+                #     self.logger.debug(cookie)  # クッキーの詳細を表示
             else:
                 self.logger.debug("クッキーが存在しません。")
 

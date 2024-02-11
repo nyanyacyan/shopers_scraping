@@ -108,6 +108,8 @@ class ScraperVer2:
             search_field = self.chrome.find_element_by_xpath(search_field_xpath)
             self.logger.debug("検索バーを発見")
 
+            time.sleep(3)
+            
             self.logger.debug("検索ワード入力開始")
             search_field.send_keys(search_word)
             self.logger.debug("検索ワード入力完了")
@@ -198,8 +200,8 @@ class ScraperVer2:
 
                 try:
                     self.logger.debug("pricesの解析とクリーニング開始")
-                    price_without_comma = re.sub("[^\d]", "", price_text)
-                    clean_price = int(price_without_comma)
+                    price_without_comma = re.sub("[^\d.]", "", price_text)
+                    clean_price = float(price_without_comma)
                     self.logger.debug(f"価格の抽出完了:{clean_price}")
                     self.price = clean_price
 
@@ -212,6 +214,7 @@ class ScraperVer2:
 
             # 現在のURLを取得
             self.url = self.chrome.current_url
+            self.logger.debug(self.url)
 
         # showcaseがなかった場合は商品がない
         except NoSuchElementException:

@@ -100,65 +100,66 @@ class ScraperPetpochitto(ScraperVer2):
             # self.petpochitto_url_xpath  商品サイトまで行かないと見れないため
         )
         return result
-    
+
 
 # 4---------------------------------------------------------------------------------------------------------
 # クッキーでのログインができないため別の方法に置き換え
 
-class ScraperSuperDelivery(Scraper):
-    def __init__(self, debug_mode=False):
-        super().__init__(debug_mode=debug_mode)
+# class ScraperSuperDelivery(Scraper):
+#     def __init__(self, debug_mode=False):
+#         super().__init__(debug_mode=debug_mode)
 
-        self.super_delivery_web_url = os.getenv("URL_SUPER_DELIVERY")  # web_url
-        self.super_delivery_cookies_file_name = "super_delivery_cookie_file.pkl"  # cookies_file_name
-        self.super_delivery_cart_element_xpath = "//div[@id='point-num1']"  # cart_element_xpath
-        self.super_delivery_search_field_xpath = "//input[@id='header_word']"  # search_field_xpath
-        self.super_delivery_showcase_box_xpath = "//div[@class='itembox-parts']"  # showcase_box_xpath
-        self.super_delivery_price_xpath = "//div[@class='item-price-box']"  # price_xpath
-        self.super_delivery_url_xpath = "//a[contains(@onclick, 'suggestRequest')]"
+#         self.super_delivery_web_url = os.getenv("URL_SUPER_DELIVERY")  # web_url
+#         self.super_delivery_cookies_file_name = "super_delivery_cookie_file.pkl"  # cookies_file_name
+#         self.super_delivery_cart_element_xpath = "//div[@id='point-num1']"  # cart_element_xpath
+#         self.super_delivery_search_field_xpath = "//input[@id='header_word']"  # search_field_xpath
+#         self.super_delivery_showcase_box_xpath = "//div[@class='itembox-parts']"  # showcase_box_xpath
+#         self.super_delivery_price_xpath = "//div[@class='item-price-box']"  # price_xpath
+#         self.super_delivery_url_xpath = "//a[contains(@onclick, 'suggestRequest')]"
 
 
-    async def scraper_super_delivery_async(self, search_word):
-        result = await self.scraper_async(
-            self.super_delivery_web_url,
-            self.super_delivery_cookies_file_name,
-            self.super_delivery_cart_element_xpath,
-            self.super_delivery_search_field_xpath,
-            search_word,
-            self.super_delivery_showcase_box_xpath,
-            self.super_delivery_price_xpath,
-            self.super_delivery_url_xpath
-        )
-        return result
-    
+#     async def scraper_super_delivery_async(self, search_word):
+#         result = await self.scraper_async(
+#             self.super_delivery_web_url,
+#             self.super_delivery_cookies_file_name,
+#             self.super_delivery_cart_element_xpath,
+#             self.super_delivery_search_field_xpath,
+#             search_word,
+#             self.super_delivery_showcase_box_xpath,
+#             self.super_delivery_price_xpath,
+#             self.super_delivery_url_xpath
+#         )
+#         return result
+
 
 # 5---------------------------------------------------------------------------------------------------------
-    
 
-class ScraperTajimaya(Scraper):
+
+class ScraperTajimaya(ScraperVer2):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
         self.tajimaya_web_url = os.getenv("URL_TAJIMAYA")  # web_url
         self.tajimaya_cookies_file_name = "tajimaya_cookie_file.pkl"  # cookies_file_name
         self.tajimaya_cart_element_xpath = "//a[contains(@href, 'cart') and .//em[contains(@class, 'material-icons')]]"  # cart_element_xpath
-        self.tajimaya_search_field_xpath = ""  # search_field_xpath
-        self.tajimaya_showcase_box_xpath = ""  # showcase_box_xpath
-        self.tajimaya_price_xpath = ""  # price_xpath
+        self.tajimaya_search_field_xpath = "//div[@class='searchForm__inner']//input[@id='s']"  # search_field_xpath
+        self.tajimaya_showcase_box_xpath = "//ul[@class='__product']//h2[@class='__title']"  # showcase_box_xpath
+        self.tajimaya_jump_link_xpath = "//ul[@class='__product']//li[contains(@class, '__item')]/a"
+        self.tajimaya_price_xpath = "//div[@class='__detail']//span[@class='c-tax-price __tax-price __is-none']"  # price_xpath
 
 
     async def scraper_tajimaya_async(self, search_word):
-        result = await self.scraper_async(
+        result = await self.scraper_ver2_async(
             self.tajimaya_web_url,
             self.tajimaya_cookies_file_name,
             self.tajimaya_cart_element_xpath,
             self.tajimaya_search_field_xpath,
             search_word,
             self.tajimaya_showcase_box_xpath,
+            self.tajimaya_jump_link_xpath,
             self.tajimaya_price_xpath,
-            self.tajimaya_url_xpath
         )
         return result
-    
+
 
 # ---------------------------------------------------------------------------------------------------------

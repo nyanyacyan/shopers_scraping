@@ -120,8 +120,10 @@ class AutoLoginPetpochitto(AutoLogin):
 
 
 class AutoLoginSuperDelivery(AutoLogin):
-    def __init__(self, debug_mode=False):
+    def __init__(self, chrome, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
+
+        self.chrome = chrome
 
         self.url_super_delivery = os.getenv('URL_SUPER_DELIVERY')  # login_url
         self.id_super_delivery = os.getenv('ID_SUPER_DELIVERY')  # userid

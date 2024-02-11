@@ -1,5 +1,7 @@
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from dotenv import load_dotenv
 import os
@@ -31,13 +33,14 @@ class ScraperVer2:
 
 
 
-    def scraper_ver2(self, search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, jump_link_xpath, price_xpath):
+    def scraper_ver2(self, search_field_xpath, search_word, search_buttan_xpath, showcase_box_xpath, jump_link_xpath, price_xpath):
         '''
         autologinにてサイトが開かれてる状態
         => 検索バーへスプシからのデータを入力して検索
         => 開いたサイトから
         '''
         try:
+            old_url = self.chrome.current_url
             # 検索バーを探して入力
             self.logger.debug("検索バーを特定開始")
             search_field = self.chrome.find_element_by_xpath(search_field_xpath)
@@ -47,21 +50,26 @@ class ScraperVer2:
             search_field.send_keys(search_word)
             self.logger.debug("検索ワード入力完了")
 
-            time.sleep(1)
+            self.logger.debug("検索ボックスをクリック")
+            search_field.click()
+            self.logger.debug("検索ボックスをクリック完了")
+
+            time.sleep(3)
+
             
             # エンターキーを入力
             search_field.send_keys(Keys.ENTER)
 
-            # # 検索ボタンを探す
-            # self.logger.debug("buttanサーチ開始")
-            # login_button = self.chrome.find_element_by_xpath(search_button_xpath)
-            # self.logger.debug("buttanサーチ、OK")
+            time.sleep(3)
 
+            new_url = self.chrome.current_url
 
-            # # 検索ボタンを押す
-            # self.logger.debug("クリック開始")
-            # self.chrome.execute_script("arguments[0].click();", login_button)
-            # self.logger.debug("クリック完了")
+            if new_url != old_url:
+                self.logger.debug("ページ遷移成功")
+            else:
+                self.logger.error("ページ遷移失敗")
+                self.logger.debug("検索ボタンを探してます")
+
 
         except NoSuchElementException as e:
             self.logger.error(f"検索バーが見つかりません:{e}")
@@ -73,7 +81,6 @@ class ScraperVer2:
             lambda d: d.execute_script("return document.readyState") == "complete"
         )
         self.logger.debug("ページは完全に表示されてる")
-
 
         try:
             # 商品ページ（showcasecasebox）があるかどうかを確認
@@ -100,7 +107,6 @@ class ScraperVer2:
                 lambda d: d.execute_script("return document.readyState") == "complete"
             )
             self.logger.debug("ページは完全に表示されてる")
-
 
             # 価格要素抽出
             try:
@@ -138,11 +144,11 @@ class ScraperVer2:
 
 
         # 同期メソッドを非同期処理に変換
-    async def scraper_ver2_async(self, search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath, url_xpath):
+    async def scraper_ver2_async(self, search_field_xpath, search_word, search_buttan_xpath, showcase_box_xpath, jump_link_xpath, price_xpath):
         loop = asyncio.get_running_loop()
 
         # ブロッキング、実行タイミング、並列処理などを適切に行えるように「functools」にてワンクッション置いて実行
-        await loop.run_in_executor(executor, functools.partial(self.scraper_ver2, search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath, url_xpath))
+        await loop.run_in_executor(executor, functools.partial(self.scraper_ver2, search_field_xpath, search_word, search_buttan_xpath, showcase_box_xpath, jump_link_xpath, price_xpath))
         self.logger.debug(f"scraper execution finished: price={self.price}, url={self.url}")
         result = {
             "price": self.price,
