@@ -17,6 +17,7 @@ class ScraperNetsea(SingleItemScraper):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
+        self.site_name = "NETSEA"
         self.netsea_web_url = os.getenv("MAIN_URL_NETSEA")  # web_url
         self.netsea_cookies_file_name = "netsea_cookie_file.pkl"  # cookies_file_name
         self.netsea_cart_element_xpath = "//li[@class='header_cart_link']"  # cart_element_xpath
@@ -28,6 +29,7 @@ class ScraperNetsea(SingleItemScraper):
     #  web_url, cookies_file_name, cart_element_xpath, search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath, url_xpath
     async def scraper_netsea_async(self, search_word):
         result = await self.single_item_scraper_async(
+            self.site_name,
             self.netsea_web_url,
             self.netsea_cookies_file_name,
             self.netsea_cart_element_xpath,
@@ -45,6 +47,7 @@ class ScraperOroshiuri(SingleItemScraper):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
+        self.site_name = "卸売ドットコム"
         self.oroshiuri_web_url = os.getenv("MAIN_URL_OROSHIURI")  # web_url
         self.oroshiuri_cookies_file_name = "oroshiuri_cookie_file.pkl"  # cookies_file_name
         self.oroshiuri_cart_element_xpath = "//a[contains(@href, 'cart') and .//i[contains(@class, 'fa-shopping-cart')]]"  # cart_element_xpath
@@ -57,6 +60,7 @@ class ScraperOroshiuri(SingleItemScraper):
     #  web_url, cookies_file_name, cart_element_xpath, search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath, url_xpath
     async def scraper_oroshiuri_async(self, search_word):
         result = await self.single_item_scraper_async(
+            self.site_name,
             self.oroshiuri_web_url,
             self.oroshiuri_cookies_file_name,
             self.oroshiuri_cart_element_xpath,
@@ -77,6 +81,7 @@ class ScraperPetpochitto(SingleItemScraper):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
+        self.site_name = "ペットポチッと"
         self.petpochitto_web_url = os.getenv("URL_PETPOCHITTO")  # web_url
         self.petpochitto_cookies_file_name = "petpochitto_cookie_file.pkl"  # cookies_file_name
         self.petpochitto_cart_element_xpath = "//a[contains(@href, 'cart')]//img[contains(@src, 'cart')]"  # cart_element_xpath
@@ -88,6 +93,7 @@ class ScraperPetpochitto(SingleItemScraper):
 
     async def scraper_petpochitto_async(self, search_word):
         result = await self.single_item_scraper_async(
+            self.site_name,
             self.petpochitto_web_url,
             self.petpochitto_cookies_file_name,
             self.petpochitto_cart_element_xpath,
@@ -138,6 +144,7 @@ class ScraperTajimaya(SingleItemScraper):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
+        self.site_name = "Tajimaya"
         self.tajimaya_web_url = os.getenv("URL_TAJIMAYA")  # web_url
         self.tajimaya_cookies_file_name = "tajimaya_cookie_file.pkl"  # cookies_file_name
         self.tajimaya_cart_element_xpath = "//a[contains(@href, 'cart') and .//em[contains(@class, 'material-icons')]]"  # cart_element_xpath
@@ -149,6 +156,7 @@ class ScraperTajimaya(SingleItemScraper):
 
     async def scraper_tajimaya_async(self, search_word):
         result = await self.single_item_scraper_async(
+            self.site_name,
             self.tajimaya_web_url,
             self.tajimaya_cookies_file_name,
             self.tajimaya_cart_element_xpath,

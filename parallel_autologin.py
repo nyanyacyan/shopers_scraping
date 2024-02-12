@@ -1,9 +1,6 @@
 # ----------------------------------------------------------------------------------
 # 非同期処理 Cookie保存　並列処理クラス
-# 2023/2/9制作
-
-#---バージョン---
-# Python==3.8.10
+# 2023/2/13制作
 
 # ----------------------------------------------------------------------------------
 import asyncio
@@ -27,13 +24,14 @@ class ParallelAutoLogin:
         self.petpochitto_instance = AutoLoginPetpochitto(debug_mode=True)
         self.tajimaya_instance = AutoLoginTajimaya(debug_mode=True)
 
+    # それぞれのタスクに対して例外処理を実施
     async def auto_login_wrapper(self, auto_login_method):
         try:
             await auto_login_method()
         except Exception as e:
             self.logger.error(f"処理中にエラーが発生しました: {e}")
 
-
+    # それぞれのタスクを並列処理
     async def parallel_auto_login(self):
         await asyncio.gather(
             self.auto_login_method(self.netsea_instance.auto_login_netsea_async),
