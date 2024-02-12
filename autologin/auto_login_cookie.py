@@ -92,7 +92,7 @@ class AutoLogin:
         # userid_xpathが出てくるまで待機
         try:
             WebDriverWait(self.chrome, 10).until(EC.presence_of_element_located((By.XPATH, userid_xpath)))
-            self.logger.debug("入力開始")
+            self.logger.debug(f"{site_name} 入力開始")
         
         except TimeoutException as e:
             print(f"タイムアウトエラー:{e}")
@@ -101,11 +101,11 @@ class AutoLogin:
         try:
             userid_field = self.chrome.find_element_by_xpath(userid_xpath)
             userid_field.send_keys(userid)
-            self.logger.debug("ID入力完了")
+            self.logger.debug(f"{site_name} ID入力完了")
 
             password_field = self.chrome.find_element_by_xpath(password_xpath)
             password_field.send_keys(password)
-            self.logger.debug("パスワード入力完了")
+            self.logger.debug(f"{site_name} パスワード入力完了")
 
         except NoSuchElementException as e:
             print(f"要素が見つからない: {e}")
@@ -121,27 +121,27 @@ class AutoLogin:
         WebDriverWait(self.chrome, 10).until(
             EC.visibility_of_element_located((By.XPATH, login_button_xpath))
         )
-        self.logger.debug("ボタンDOMの読み込みは完了してる")
+        self.logger.debug(f"{site_name} ボタンDOMの読み込みは完了してる")
 
         try:
             # ログインを維持するチェックボックスを探す
             remember_box = self.chrome.find_element_by_xpath(remember_box_xpath)
-            self.logger.debug("チェックボタンが見つかりました。")
+            self.logger.debug(f"{site_name} チェックボタンが見つかりました。")
 
         except ElementNotInteractableException as e:
-            self.logger.error(f"チェックボックスが見つかりません。{e}")
+            self.logger.error(f"{site_name} チェックボックスが見つかりません。{e}")
 
         except InvalidSelectorException:
-            self.logger.debug("チェックボックスないためスキップ")
+            self.logger.debug(f"{site_name} チェックボックスないためスキップ")
 
         try:
             if remember_box:
             # remember_boxをクリックする
                 remember_box.click()
-            self.logger.debug("チェックボタンをクリック")
+            self.logger.debug(f"{site_name} チェックボタンをクリック")
 
         except UnboundLocalError:
-            self.logger.debug("チェックボタンなし")
+            self.logger.debug(f"{site_name} チェックボタンなし")
 
         time.sleep(1)
 
@@ -150,24 +150,24 @@ class AutoLogin:
             # sitekeyを検索
             elements = self.chrome.find_elements_by_css_selector('[data-sitekey]')
             if len(elements) > 0:
-                self.logger.info("reCAPTCHA処理実施中")
+                self.logger.info(f"{site_name} reCAPTCHA処理実施中")
 
 
                 # solveRecaptchaファイルを実行
                 try:
                     self.recaptcha_solver.handle_recaptcha(current_url)
-                    self.logger.info("reCAPTCHA処理、完了")
+                    self.logger.info(f"{site_name} reCAPTCHA処理、完了")
 
                 except Exception as e:
-                    self.logger.error("reCAPTCHA処理に失敗しました")
+                    self.logger.error(f"{site_name} reCAPTCHA処理に失敗しました")
                     # ログイン失敗をライン通知
-                    self.line_notify.line_notify("ログインが正しくできませんでした")
+                    self.line_notify.line_notify(f"{site_name} ログインが正しくできませんでした")
 
 
-                self.logger.debug("クリック開始")
+                self.logger.debug(f"{site_name} クリック開始")
 
                 # ログインボタン要素を見つける
-                login_button = self.chrome.find_element_by_id("recaptcha-submit")
+                login_button = self.chrome.find_element_by_id(f"{site_name} recaptcha-submit")
 
                 # ボタンが無効化されているか確認し、無効化されていれば有効にする
                 self.chrome.execute_script("document.getElementById('recaptcha-submit').disabled = false;")
@@ -176,29 +176,29 @@ class AutoLogin:
                 login_button.click()
 
             else:
-                self.logger.info("reCAPTCHAなし")
+                self.logger.info(f"{site_name} reCAPTCHAなし")
 
                 login_button = self.chrome.find_element_by_xpath(login_button_xpath)
-                self.logger.debug("ボタン捜索完了")
+                self.logger.debug(f"{site_name} ボタン捜索完了")
 
                 login_button.send_keys(Keys.ENTER)
-                self.logger.debug("クリック完了")
+                self.logger.debug(f"{site_name} クリック完了")
 
 
         # recaptchaなし
         except NoSuchElementException:
-            self.logger.info("reCAPTCHAなし")
+            self.logger.info(f"{site_name} reCAPTCHAなし")
 
             login_button = self.chrome.find_element_by_xpath(login_button_xpath)
-            self.logger.debug("ボタン捜索完了")
+            self.logger.debug(f"{site_name} ボタン捜索完了")
 
             try:
                 login_button.send_keys(Keys.ENTER)
-                self.logger.debug("クリック完了")
+                self.logger.debug(f"{site_name} クリック完了")
 
             except ElementNotInteractableException:
                 self.chrome.execute_script("arguments[0].click();", login_button)
-                self.logger.debug("JavaScriptを使用してクリック実行")
+                self.logger.debug(f"{site_name} JavaScriptを使用してクリック実行")
 
 
         # ページ読み込み待機
@@ -207,11 +207,11 @@ class AutoLogin:
             WebDriverWait(self.chrome, 5).until(
             lambda driver: driver.execute_script('return document.readyState') == 'complete'
             )
-            self.logger.debug("ログインページ読み込み完了")
+            self.logger.debug(f"{site_name} ログインページ読み込み完了")
 
 
         except Exception as e:
-            self.logger.error(f"handle_recaptcha を実行中にエラーが発生しました: {e}")
+            self.logger.error(f"{site_name} handle_recaptcha を実行中にエラーが発生しました: {e}")
 
 
 
@@ -219,7 +219,7 @@ class AutoLogin:
         # ログイン完了確認
         try:
             self.chrome.find_element_by_xpath(cart_element_xpath)
-            self.logger.info("ログイン完了")
+            self.logger.info(f"{site_name} ログイン完了")
             # self.chatwork_notify.chatwork_notify("ログインに成功")
 
             timestamp = 1742074325
@@ -228,22 +228,22 @@ class AutoLogin:
 
             # Cookieを取得する
             cookies = self.chrome.get_cookies()
-            self.logger.debug("Cookieの取得完了")
+            self.logger.debug(f"{site_name} Cookieの取得完了")
 
             # クッキーの存在を確認
             if cookies:
-                self.logger.debug("クッキーが存在します。")
+                self.logger.debug(f"{site_name} クッキーが存在します。")
                 # for cookie in cookies:
                 #     self.logger.debug(cookie)  # クッキーの詳細を表示
             else:
-                self.logger.debug("クッキーが存在しません。")
+                self.logger.debug(f"{site_name} クッキーが存在しません。")
 
             # Cookieをscraper.subに保存する
             pickle.dump(cookies,open('/Users/nyanyacyan/Desktop/ProgramFile/project_file/shopers_scraping/scraper/scraper_subclass/cookies/' + cookies_file_name, 'wb'))
-            self.logger.debug("Cookieの保存完了")
+            self.logger.debug(f"{site_name} Cookieの保存完了")
 
         except NoSuchElementException:
-            self.logger.error(f"カートの確認が取れませんでした")
+            self.logger.error(f"{site_name} カートの確認が取れませんでした")
             # self.chatwork_notify.chatwork_image_notify("ログインに失敗。")
             # self.line_notify.line_image_notify("ログインに失敗。")
             # self.slack_notify.slack_image_notify("ログインに失敗。")

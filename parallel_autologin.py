@@ -1,5 +1,13 @@
-import os
+# ----------------------------------------------------------------------------------
+# 非同期処理 Cookie保存　並列処理クラス
+# 2023/2/9制作
+
+#---バージョン---
+# Python==3.8.10
+
+# ----------------------------------------------------------------------------------
 import asyncio
+import os
 
 # 自作モジュール
 from logger.debug_logger import Logger
@@ -19,17 +27,21 @@ class ParallelAutoLogin:
         self.petpochitto_instance = AutoLoginPetpochitto(debug_mode=True)
         self.tajimaya_instance = AutoLoginTajimaya(debug_mode=True)
 
+    async def auto_login_wrapper(self, auto_login_method):
+        try:
+            await auto_login_method()
+        except Exception as e:
+            self.logger.error(f"処理中にエラーが発生しました: {e}")
+
 
     async def parallel_auto_login(self):
-        self.logger.info("並行処理を開始")
         await asyncio.gather(
-            self.netsea_instance.auto_login_netsea_async(),
-            self.oroshiuri_instance.auto_login_oroshiuri_async(),
-            self.petpochitto_instance.auto_login_petpochitto_async(),
-            self.tajimaya_instance.auto_login_tajimaya_async()
+            self.auto_login_method(self.netsea_instance.auto_login_netsea_async),
+            self.auto_login_method(self.oroshiuri_instance.auto_login_oroshiuri_async),
+            self.auto_login_method(self.petpochitto_instance.auto_login_petpochitto_async),
+            self.auto_login_method(self.tajimaya_instance.auto_login_tajimaya_async)
         )
-        self.logger.info("並行処理完了")
 
-if __name__ == "__main__":
-    pal = ParallelAutoLogin()
-    asyncio.run(pal.parallel_auto_login())
+# if __name__ == "__main__":
+#     pal = ParallelAutoLogin()
+#     asyncio.run(pal.parallel_auto_login())
