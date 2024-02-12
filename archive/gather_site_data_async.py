@@ -3,7 +3,7 @@ import os
 
 from logger.debug_logger import Logger
 from auto_scraper_oroshiuri import AutoScraperOroshiuri  # 自作クラスのインポートパスを適宜調整してください
-from scraper.cookieless_scraper_super_delivery import AutoScraperNetsea
+from scraper.autologin_scraper_nocookie import AutoScraperNetsea
 
 class GatherSiteDataAsync:
     def __init__(self, debug_mode=False):

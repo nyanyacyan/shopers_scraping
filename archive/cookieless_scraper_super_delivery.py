@@ -12,7 +12,7 @@ import os
 
 # 自作モジュール
 from autologin.autologin_subclass.auto_login_subclass_cookie import AutoLoginSuperDelivery
-from scraper.scraper_subclass.scaper_async_no_cookie_subclass import ScraperNocookieSuperDelivery
+from scraper.scraper_subclass.no_cookie import ScraperNocookieSuperDelivery
 from logger.debug_logger import Logger
 
 load_dotenv()

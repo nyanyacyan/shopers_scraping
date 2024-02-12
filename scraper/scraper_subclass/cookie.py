@@ -8,13 +8,12 @@
 
 # １---------------------------------------------------------------------------------------------------------
 from dotenv import load_dotenv
-from scraper.scraper_cookie_login import Scraper
-from scraper.scraper_ver2_cookie import ScraperVer2
+from scraper.single_item_scraper_cookie import SingleItemScraper
 import os
 
 load_dotenv()  # .env ファイルから環境変数を読み込む
 
-class ScraperNetsea(ScraperVer2):
+class ScraperNetsea(SingleItemScraper):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
@@ -28,7 +27,7 @@ class ScraperNetsea(ScraperVer2):
 
     #  web_url, cookies_file_name, cart_element_xpath, search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath, url_xpath
     async def scraper_netsea_async(self, search_word):
-        result = await self.scraper_ver2_async(
+        result = await self.single_item_scraper_async(
             self.netsea_web_url,
             self.netsea_cookies_file_name,
             self.netsea_cart_element_xpath,
@@ -42,7 +41,7 @@ class ScraperNetsea(ScraperVer2):
     
 # ２---------------------------------------------------------------------------------------------------------
 
-class ScraperOroshiuri(ScraperVer2):
+class ScraperOroshiuri(SingleItemScraper):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
@@ -57,7 +56,7 @@ class ScraperOroshiuri(ScraperVer2):
 
     #  web_url, cookies_file_name, cart_element_xpath, search_field_xpath, search_word, search_button_xpath, showcase_box_xpath, price_xpath, url_xpath
     async def scraper_oroshiuri_async(self, search_word):
-        result = await self.scraper_ver2_async(
+        result = await self.single_item_scraper_async(
             self.oroshiuri_web_url,
             self.oroshiuri_cookies_file_name,
             self.oroshiuri_cart_element_xpath,
@@ -74,7 +73,7 @@ class ScraperOroshiuri(ScraperVer2):
 # 3---------------------------------------------------------------------------------------------------------
 
 
-class ScraperPetpochitto(ScraperVer2):
+class ScraperPetpochitto(SingleItemScraper):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
@@ -88,7 +87,7 @@ class ScraperPetpochitto(ScraperVer2):
 
 
     async def scraper_petpochitto_async(self, search_word):
-        result = await self.scraper_ver2_async(
+        result = await self.single_item_scraper_async(
             self.petpochitto_web_url,
             self.petpochitto_cookies_file_name,
             self.petpochitto_cart_element_xpath,
@@ -135,7 +134,7 @@ class ScraperPetpochitto(ScraperVer2):
 # 5---------------------------------------------------------------------------------------------------------
 
 
-class ScraperTajimaya(ScraperVer2):
+class ScraperTajimaya(SingleItemScraper):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
@@ -149,7 +148,7 @@ class ScraperTajimaya(ScraperVer2):
 
 
     async def scraper_tajimaya_async(self, search_word):
-        result = await self.scraper_ver2_async(
+        result = await self.single_item_scraper_async(
             self.tajimaya_web_url,
             self.tajimaya_cookies_file_name,
             self.tajimaya_cart_element_xpath,

@@ -12,11 +12,11 @@
 # ---------------------------------------------------------------------------------------------------------
 import os
 from dotenv import load_dotenv
-from scraper.scraper_ver2_async import ScraperVer2
+from scraper.single_item_scraper_nocookie import SingleItemScraper
 
 load_dotenv()  # .env ファイルから環境変数を読み込む
 
-class ScraperNocookieSuperDelivery(ScraperVer2):
+class SuperDeliveryScraperNoCookie(SingleItemScraper):
     def __init__(self, chrome, debug_mode=False):
         super().__init__(chrome, debug_mode=debug_mode)
 
@@ -30,7 +30,7 @@ class ScraperNocookieSuperDelivery(ScraperVer2):
 
     #  search_field_xpath, search_word, search_buttan_xpath, showcase_box_xpath, jump_link_xpath, price_xpath
     async def scraper_super_delivery_async(self, search_word):
-        result = await self.scraper_ver2_async(
+        result = await self.single_item_scraper_async(
             self.super_delivery_search_field_xpath,
             search_word,
             self.super_delivery_search_buttan_xpath,
