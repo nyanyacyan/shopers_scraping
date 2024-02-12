@@ -79,7 +79,8 @@ class AutoLogin:
 
 
     # 同期的なログイン
-    def auto_login(self, login_url, userid, password, userid_xpath, password_xpath, login_button_xpath, cart_element_xpath, remember_box_xpath, cookies_file_name):
+    def auto_login(self, site_name, login_url, userid, password, userid_xpath, password_xpath, login_button_xpath, cart_element_xpath, remember_box_xpath, cookies_file_name):
+        self.logger.info(f"{site_name} Cookie作成を開始")
         self.chrome.get(login_url)
 
         # 現在のURL
@@ -249,9 +250,11 @@ class AutoLogin:
 
         time.sleep(1)
 
+        self.logger.info(f"{site_name} Cookie作成、完了")
+
     # 同期メソッドを非同期処理に変換
-    async def auto_login_async(self, login_url, userid, password, userid_xpath, password_xpath, login_button_xpath, cart_element_xpath, remember_box_xpath, cookies_file_name):
+    async def auto_login_async(self, site_name, login_url, userid, password, userid_xpath, password_xpath, login_button_xpath, cart_element_xpath, remember_box_xpath, cookies_file_name):
         loop = asyncio.get_running_loop()
 
         # ブロッキング、実行タイミング、並列処理などを適切に行えるように「functools」にてワンクッション置いて実行
-        await loop.run_in_executor(executor, functools.partial(self.auto_login,login_url, userid, password, userid_xpath, password_xpath, login_button_xpath, cart_element_xpath, remember_box_xpath, cookies_file_name))
+        await loop.run_in_executor(executor, functools.partial(self.auto_login, site_name, login_url, userid, password, userid_xpath, password_xpath, login_button_xpath, cart_element_xpath, remember_box_xpath, cookies_file_name))

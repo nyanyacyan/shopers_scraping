@@ -19,6 +19,7 @@ class AutoLoginNetsea(AutoLogin):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
+        self.site_name = "NETSEA"
         self.url_netsea = os.getenv('URL_NETSEA')  # login_url
         self.id_netsea = os.getenv('ID_NETSEA')  # userid
         self.password_netsea = os.getenv('PASSWORD_NETSEA')  # password
@@ -32,6 +33,7 @@ class AutoLoginNetsea(AutoLogin):
 
     async def auto_login_netsea_async(self):
         await self.auto_login_async(
+            self.site_name,
             self.url_netsea,
             self.id_netsea,
             self.password_netsea,
@@ -59,6 +61,7 @@ class AutoLoginOroshiuri(AutoLogin):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
+        self.site_name = "卸売ドットコム"
         self.url_oroshiuri = os.getenv('URL_OROSHIURI')  # login_url
         self.id_oroshiuri = os.getenv('ID_OROSHIURI')  # userid
         self.password_oroshiuri = os.getenv('PASSWORD_OROSHIURI')  # password
@@ -72,6 +75,7 @@ class AutoLoginOroshiuri(AutoLogin):
 
     async def auto_login_oroshiuri_async(self):
         await self.auto_login_async(
+            self.site_name,
             self.url_oroshiuri,
             self.id_oroshiuri,
             self.password_oroshiuri,
@@ -91,6 +95,7 @@ class AutoLoginPetpochitto(AutoLogin):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
+        self.site_name = "ペットポチッと"
         self.url_petpochitto = os.getenv('URL_PETPOCHITTO')  # login_url
         self.id_petpochitto = os.getenv('ID_PETPOCHITTO')  # userid
         self.password_petpochitto = os.getenv('PASSWORD_PETPOCHITTO')  # password
@@ -104,6 +109,7 @@ class AutoLoginPetpochitto(AutoLogin):
 
     async def auto_login_petpochitto_async(self):
         await self.auto_login_async(
+            self.site_name,
             self.url_petpochitto,
             self.id_petpochitto,
             self.password_petpochitto,
@@ -125,6 +131,7 @@ class AutoLoginSuperDelivery(AutoLogin):
 
         self.chrome = chrome
 
+        self.site_name = "SuperDelivery"
         self.url_super_delivery = os.getenv('URL_SUPER_DELIVERY')  # login_url
         self.id_super_delivery = os.getenv('ID_SUPER_DELIVERY')  # userid
         self.password_super_delivery = os.getenv('PASSWORD_SUPER_DELIVERY')  # password
@@ -138,6 +145,7 @@ class AutoLoginSuperDelivery(AutoLogin):
 
     async def auto_login_super_delivery_async(self):
         await self.auto_login_async(
+            self.site_name,
             self.url_super_delivery,
             self.id_super_delivery,
             self.password_super_delivery,
@@ -150,13 +158,14 @@ class AutoLoginSuperDelivery(AutoLogin):
         )
 
 
-# ５----------------------------------------------------------------------------------
+# 4----------------------------------------------------------------------------------
 
 
 class AutoLoginTajimaya(AutoLogin):
     def __init__(self, debug_mode=False):
         super().__init__(debug_mode=debug_mode)
 
+        self.site_name = "Tajimaya"
         self.url_tajimaya = os.getenv('URL_TAJIMAYA')  # login_url
         self.id_tajimaya = os.getenv('ID_TAJIMAYA')  # userid
         self.password_tajimaya = os.getenv('PASSWORD_TAJIMAYA')  # password
@@ -170,6 +179,7 @@ class AutoLoginTajimaya(AutoLogin):
 
     async def auto_login_tajimaya_async(self):
         await self.auto_login_async(
+            self.site_name,
             self.url_tajimaya,
             self.id_tajimaya,
             self.password_tajimaya,
