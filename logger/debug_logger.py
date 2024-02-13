@@ -10,6 +10,7 @@
 # ----------------------------------------------------------------------------------
 import logging
 import os
+import sys
 
 class LoggerBasicColor(logging.Formatter):
     COLORS = {
@@ -67,3 +68,5 @@ class Logger:
 
     def get_logger(self):
         return self.logger
+    
+print(sys.path)

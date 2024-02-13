@@ -1,7 +1,7 @@
 # coding: utf-8
 # ---------------------------------------------------------------------------------------------------------
 # スプレッドシート書込　　親クラス
-# 2023/1/30制作
+# 2023/2/13　制作
 
 #---バージョン---
 # Python==3.8.10
@@ -19,12 +19,11 @@ import os
 import datetime
 
 from logger.debug_logger import Logger
-from gather_site_data_async import GatherSiteDataAsync
 
 load_dotenv()
 
 class SpreadsheetWrite:
-    def __init__(self, debug_mode=False):
+    def __init__(self, results_dict,debug_mode=False):
         # Loggerクラスを初期化
         debug_mode = os.getenv('DEBUG_MODE', 'False') == 'True'
         self.logger_instance = Logger(__name__, debug_mode=debug_mode)
@@ -39,18 +38,14 @@ class SpreadsheetWrite:
         self.gs = gspread.authorize(credentials)
 
         self.spreadsheet_key = os.getenv('SPREADSHEET_KEY')
+
+        self.results_dict = results_dict
         
 
 
-    async def spreadsheet_write_async(self, search_word):
-        # インスタンス化
-        gatherer = GatherSiteDataAsync()
+    def spreadsheet_write_async(self):
         # それぞれのワークシートを定義
         worksheet = self.gs.open_by_key(self.spreadsheet_key).worksheet("リサーチツール")
-
-        # 集計データ読み込み
-        sites_data = await gatherer.gather_site_data_async(search_word)
-        self.logger.debug(sites_data)
 
         # 現在の日付を YYYY-MM-DD 形式で取得
         current_date = datetime.datetime.now().strftime('%Y/%m/%d')
@@ -70,17 +65,16 @@ class SpreadsheetWrite:
 
         # E列から順番に追記していく
         self.logger.debug("全サイトデータをスプシに書き込み開始")
-        start_cell = 5  # E列は「５」
-        for item in sites_data:
-            if item["price"] != "該当なし":
-                price_text = f'{item["price"]} 円'
-            else:
-                price_text = item["price"]
-
-            hyperlink = f'=HYPERLINK("{item["url"]}", "{price_text}")'
+        start_col = 5  # E列は「５」
+        for site, data_list in self.results_dict.items():
+            current_col = start_col
 
             try:
-                worksheet.update_cell(first_blank_cell, start_cell, hyperlink)
+                for price, url in data_list:
+                    hyperling_formula = f'=HYPERLINK("{url}", "{price}")'
+                    worksheet.update_cell(first_blank_cell, current_col, hyperling_formula)
+                    current_col += 1
+
             except gspread.exceptions.APIError as e:
                 self.logger.error(f"APIエラーが発生しました: {e}")
             except RefreshError as e:
@@ -88,6 +82,6 @@ class SpreadsheetWrite:
             except HttpError as e:
                 self.logger.error(f"HTTPエラーが発生しました: {e}")
 
-            start_cell += 1
 
         self.logger.debug("全サイトデータをスプシに書き込み完了")
+        first_blank_cell += 1  # 次の行へ

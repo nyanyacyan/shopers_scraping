@@ -51,7 +51,7 @@ class ParallelScraper:
 
         return results_dict
 
-if __name__ == "__main__":
-    pal = ParallelScraper()
-    search_word = '9784861488542 れんそうカード'
-    asyncio.run(pal.parallel_scraper(search_word))
+# if __name__ == "__main__":
+#     pal = ParallelScraper()
+#     search_word = '9784861488542 れんそうカード'
+#     asyncio.run(pal.parallel_scraper(search_word))
