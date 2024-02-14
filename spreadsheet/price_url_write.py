@@ -98,7 +98,8 @@ class PriceUrlSpreadsheetWrite:
 
 
         self.logger.debug("全サイトデータをスプシに書き込み完了")
-        first_blank_cell += 1  # 次の行へ
+
+        return True
 
 
     # 非同期化

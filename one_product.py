@@ -48,11 +48,11 @@ class OneProduct:
 
         try:
             self.logger.debug("price_url_spreadsheet_write開始")
-            await self.price_url_spreadsheet_write.price_url_spreadsheet_write()
+            await self.price_url_spreadsheet_write.price_url_spreadsheet_write_async()
             self.logger.debug("price_url_spreadsheet_write終了")
 
         except Exception as e:
-            self.logger.debug(f"処理中にエラーが発生しました。{e}")
+            self.logger.error(f"処理中にエラーが発生しました。{e}")
 
 if __name__ == "__main__":
     search_word = '9784861488542 れんそうカード'
