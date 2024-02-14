@@ -11,7 +11,7 @@ from logger.debug_logger import Logger
 from scraper.scraper_subclass.cookie import ScraperNetsea, ScraperOroshiuri, ScraperPetpochitto, ScraperTajimaya
 
 class ParallelScraper:
-    def __init__(self):
+    def __init__(self, search_word, debug_mode=False):
         # Loggerクラスを初期化
         debug_mode = os.getenv('DEBUG_MODE', 'False') == 'True'
         self.logger_instance = Logger(__name__, debug_mode=debug_mode)
@@ -24,12 +24,16 @@ class ParallelScraper:
         self.petpochitto_instance = ScraperPetpochitto(debug_mode=True)
         self.tajimaya_instance = ScraperTajimaya(debug_mode=True)
 
+        self.search_word = search_word
+
     # それぞれのタスクに対して例外処理を実施
-    async def scraper_wrapper(self, scraper_method, search_word):
+    async def scraper_wrapper(self, scraper_method, *args):
         try:
-            await scraper_method(search_word)
+            result = await scraper_method(*args)
+            return result
         except Exception as e:
             self.logger.error(f"処理中にエラーが発生しました: {e}")
+            return None
 
     # それぞれのタスクを並列処理
     async def parallel_scraper(self, search_word):
@@ -42,16 +46,18 @@ class ParallelScraper:
         )
 
         # スプシの順番に沿って、上から順番に辞書に入れ込む
+        # データを追加する際にはここ入れていく
         results_dict = {
-            "netsea": results[0],
-            "oroshiuri": results[1],
-            "petpochitto": results[2],
-            "tajimaya": results[3]
+            "netsea": results[0],  # netsea
+            "oroshiuri": results[1],  # netsea
+            "petpochitto": results[2],  # netsea
+            "tajimaya": results[3]  # netsea
         }
 
+        self.logger.info(results_dict)
         return results_dict
 
 # if __name__ == "__main__":
-#     pal = ParallelScraper()
 #     search_word = '9784861488542 れんそうカード'
+#     pal = ParallelScraper(search_word=search_word)
 #     asyncio.run(pal.parallel_scraper(search_word))

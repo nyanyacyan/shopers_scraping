@@ -214,7 +214,7 @@ class SingleItemScraper:
         except NoSuchElementException:
             self.logger.error("商品の該当なし")
             self.price = "該当なし"
-            self.url = None
+            self.url = ""
 
         self.logger.info(f"{site_name} スクレイピング、終了")
 

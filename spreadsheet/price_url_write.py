@@ -17,12 +17,14 @@ from googleapiclient.errors import HttpError
 from dotenv import load_dotenv
 import os
 import datetime
+import asyncio
+from functools import partial
 
 from logger.debug_logger import Logger
 
 load_dotenv()
 
-class SpreadsheetWrite:
+class PriceUrlSpreadsheetWrite:
     def __init__(self, results_dict,debug_mode=False):
         # Loggerクラスを初期化
         debug_mode = os.getenv('DEBUG_MODE', 'False') == 'True'
@@ -43,7 +45,7 @@ class SpreadsheetWrite:
         
 
 
-    def spreadsheet_write_async(self):
+    def price_url_spreadsheet_write(self):
         # それぞれのワークシートを定義
         worksheet = self.gs.open_by_key(self.spreadsheet_key).worksheet("リサーチツール")
 
@@ -65,15 +67,27 @@ class SpreadsheetWrite:
 
         # E列から順番に追記していく
         self.logger.debug("全サイトデータをスプシに書き込み開始")
+
+        self.logger.debug(self.results_dict)
         start_col = 5  # E列は「５」
-        for site, data_list in self.results_dict.items():
-            current_col = start_col
+
+
+        # 辞書の各要素をサイト別に置換して「価格」と「url」を抽出してスプシに反映
+        for index,(site, info) in enumerate(self.results_dict.items()):
+            current_col = start_col + index
 
             try:
-                for price, url in data_list:
+                price = info['price']
+                url = info['url']
+
+                self.logger.debug(f"データ確認 {price},{url}")
+
+                # urlがない場合は価格（該当なし）のみを表記する
+                if url:
                     hyperling_formula = f'=HYPERLINK("{url}", "{price}")'
                     worksheet.update_cell(first_blank_cell, current_col, hyperling_formula)
-                    current_col += 1
+                else:
+                    worksheet.update_cell(first_blank_cell, current_col, str(price))
 
             except gspread.exceptions.APIError as e:
                 self.logger.error(f"APIエラーが発生しました: {e}")
@@ -85,3 +99,12 @@ class SpreadsheetWrite:
 
         self.logger.debug("全サイトデータをスプシに書き込み完了")
         first_blank_cell += 1  # 次の行へ
+
+
+    # 非同期化
+    async def price_url_spreadsheet_write_async(self):
+        loop = asyncio.get_running_loop()
+
+        func = partial(self.price_url_spreadsheet_write)
+
+        await loop.run_in_executor(None, func)
