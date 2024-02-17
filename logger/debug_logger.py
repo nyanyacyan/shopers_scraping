@@ -14,8 +14,11 @@ import sys
 
 class LoggerBasicColor(logging.Formatter):
     COLORS = {
-        "INFO": "\033[94m",  # 青色
-        "ERROR" : "\033[91m",
+        "DEBUG": "\033[90m",  # グレー
+        "INFO": "\033[94m",   # 青色
+        "WARNING": "\033[93m", # 黄色
+        "ERROR": "\033[91m",  # 赤色
+        "CRITICAL": "\033[95m", # マゼンダ
     }
 
     RESET = "\033[0m"
