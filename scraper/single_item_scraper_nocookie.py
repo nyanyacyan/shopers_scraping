@@ -148,7 +148,7 @@ class SingleItemScraper:
         loop = asyncio.get_running_loop()
 
         # ブロッキング、実行タイミング、並列処理などを適切に行えるように「functools」にてワンクッション置いて実行
-        await loop.run_in_executor(executor, functools.partial(self.scraper_ver2, search_field_xpath, search_word, search_buttan_xpath, showcase_box_xpath, jump_link_xpath, price_xpath))
+        await loop.run_in_executor(executor, functools.partial(self.single_item_scraper, search_field_xpath, search_word, search_buttan_xpath, showcase_box_xpath, jump_link_xpath, price_xpath))
         self.logger.debug(f"scraper execution finished: price={self.price}, url={self.url}")
         result = {
             "price": self.price,
